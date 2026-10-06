@@ -47,6 +47,8 @@ There's a lot more (a rooftop bar, an office dog, an arcade, supercars in the ga
 
 ## Requirements
 
+The boss’s upstairs computer can loop your own copy of the original American *Office* intro silently while its theme plays from that desk every 15 minutes, initially at 50% volume. Use **E** at the **World’s Best Boss** plaque to select the video and control the theme. Minesweeper still works from the boss’s chair. See [boss-room playback](docs/boss-room.md).
+
 On the machine that runs the office:
 
 - **Node.js 20+**

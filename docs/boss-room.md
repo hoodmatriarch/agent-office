@@ -1,0 +1,9 @@
+# Boss-room playback
+
+The upstairs boss is busy supervising: a “World’s Best Boss” plaque and a “You work. I supervise.” memo sit by the computer. Press **E** at the plaque for the television controls. Sit in the boss’s chair and press **E** as usual for Minesweeper; the television returns when the game closes, with the board preserved.
+
+Choose a video copy of the **original American The Office opening, with the Scrantones recording** that you are allowed to use. No television footage, theme recording, cover, or generated substitute is included. A browser-playable MP4 with H.264 video and AAC audio is recommended, up to 100 MB. The feature plays exactly the file you select; it cannot certify a file’s provenance. The file is saved in this browser’s IndexedDB, never uploaded or committed. Other browsers and teammates select their own file.
+
+The monitor loops the video **muted**. Its audio plays separately, once every **15 minutes** after loading the video. **Play theme now** previews the sound and restarts that interval. The initial theme level is **50%**, further reduced by the office’s sound-volume setting; either the office mute or music mute silences it. Stereo positioning follows the camera, with distance attenuation and a muffled sound beyond the immediate desk area.
+
+Playback requires a click or key press for the browser to allow audio. It runs while this office page is open. Hidden pages, roof visits, other maps, and floor transitions pause playback; missed breaks are skipped instead of queued. Volume changes apply for the current page session. If browser storage is unavailable, the selected video works until the page closes and must be selected again next time.
