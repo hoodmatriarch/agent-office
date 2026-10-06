@@ -1,0 +1,26 @@
+export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen';
+export interface Asset { id: string; name: string; type: string; size: number }
+export class Collection<T> {
+  revision = 0;
+  constructor(readonly bucket: Bucket, public value: T) {}
+  async load() {
+    const saved = await request(`/api/facilities/state?bucket=${this.bucket}`);
+    this.revision = saved.revision; if (saved.value !== null) this.value = saved.value as T;
+    return this.value;
+  }
+  async save() {
+    const saved = await request(`/api/facilities/state?bucket=${this.bucket}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: this.revision, value: this.value }) });
+    this.revision = saved.revision;
+  }
+}
+export async function request(url: string, options?: RequestInit) {
+  const response = await fetch(url, options);
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error ?? 'The office could not save this.');
+  return body;
+}
+export const assetUrl = (asset: Asset, download = false) => `/api/facilities/file?id=${encodeURIComponent(asset.id)}${download ? '&download=1' : ''}`;
+export const upload = async (file: File): Promise<Asset> => {
+  if (file.size > 80 * 1024 * 1024) throw new Error('Choose a file under 80 MB.');
+  return request(`/api/facilities/upload?name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file });
+};

@@ -327,6 +327,8 @@ export interface ViewEffect<G = unknown> {
   update?(): void;
   /** It has the screen to itself right now (the telescope, a game up close): your hands aren't drawn over it. */
   covers?(): boolean;
+  /** A separate view owns rendering; keep simulation running without drawing the hidden scene. */
+  suspendsScene?(): boolean;
   /** Draws the frame through this. */
   filter?: FrameFilter;
 }
@@ -364,11 +366,16 @@ export class View<G = unknown> {
     return false;
   }
 
+  suspended(): boolean {
+    return this.effects.items.some(effect => effect.suspendsScene?.());
+  }
+
   /** The filters that are on this frame (kept, so drawing one allocates nothing). */
   private readonly on: FrameFilter[] = [];
 
   /** Draws the frame (`draw`) through every filter that's on, the first one outermost. */
   draw(f: Frame, draw: () => void): void {
+    if (this.suspended()) return;
     const on = this.on;
     on.length = 0;
     for (const e of this.effects.items) if (e.filter?.begin()) on.push(e.filter);
