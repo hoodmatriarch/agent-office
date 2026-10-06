@@ -47,6 +47,10 @@ There's a lot more (a rooftop bar, an office dog, an arcade, supercars in the ga
 
 ## Requirements
 
+**New to coding?** Pip, the blue office guide, walks around the floor and explains the tools in everyday language. Press **F2**, click **Ask Pip**, or press **E** near him for a walking tour, examples of what to ask a worker, and a searchable tool guide. Pip uses built-in explanations without coding-agent usage. See [the beginner guide](docs/guide.md).
+
+The boss’s upstairs computer can loop your own copy of the original American *Office* intro silently while its theme plays from that desk every 15 minutes, at 80% in the boss office and 45% in the main work area. Use **E** at the **World’s Best Boss** plaque to select the video and control the theme. Minesweeper still works from the boss’s chair. See [boss-room playback](docs/boss-room.md).
+
 On the machine that runs the office:
 
 - **Node.js 20+**
