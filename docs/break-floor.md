@@ -1,8 +1,8 @@
 # The shared break floor
 
-Open **Break floor** on screen, or select **The break floor** in the elevator. It is a shared facility available without a GitHub project. It opens a separate walkable 3D facility view while project workers continue running. Every visitor has their own navigation view; this first version does not synchronize occupants or kitchen shifts between visitors.
+Select **Break floor** in the elevator, alongside the project floors and rooftop bar. It is a real shared building destination (`@break`) with its own elevator, using the same scene, camera, player controls, collision system, chat/voice and shared visitor presence as the office. It is available without a GitHub project. Project workers continue running while you are there. Returning after a browser reload or reconnect keeps you on the break floor. Kitchen shifts and editable content are not synchronized live between visitors.
 
-The overview shows the kitchen, dining tables, window lounge and library, men's and women's bathrooms, storeroom, lockers, vending machine and drawing/document corner. Choose a destination to walk around furniture to it, or walk with WASD/arrow keys and drag to look. Press E nearby or click Use. Close with the top-right X or Escape to return to your project. Movement keys stand up from a seat.
+Explore the kitchen, dining tables, window lounge and library, men's and women's bathrooms, storeroom, lockers, vending machine and drawing/document corner using the normal office controls. Press E near a station. **Floor guide** can walk you to a station and open its tool. The physical elevator takes you back to a project, up to the rooftop bar, or down to the garage. Tool windows close with X/Escape while you remain on the break floor. Movement keys stand up from a seat; seating occupancy is shared with other visitors.
 
 ## Food and kitchen shifts
 

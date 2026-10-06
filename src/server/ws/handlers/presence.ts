@@ -2,6 +2,7 @@
 // their name and look, what they have open, voice and screen sharing, and chat.
 import type { ChatLine, PresenceClientMsg } from '../../../shared/protocol.js';
 import { seatHereOn } from '../../../shared/maps/index.js';
+import { builtinFloor } from '../../../shared/builtin-floors.js';
 import { sanitizeLook } from '../../../shared/avatar.js';
 import { isEmote } from '../../../shared/emotes.js';
 import { ROOF, isDrink } from '../../../shared/rooftop.js';
@@ -64,7 +65,7 @@ export const presenceHandlers = {
     // Everyone sees them sit down (or get up), and anyone who comes in later finds them sitting.
     // Only on a seat where they are: the roof's up on the roof, the office's on a floor.
     const key = str(msg.seat, 40);
-    const seat = seatHereOn(ctx.maps.plan(), key, c.peer.floor === ROOF) ? key : undefined;
+    const seat = seatHereOn(builtinFloor(c.peer.floor)?.plan ?? ctx.maps.plan(), key, c.peer.floor === ROOF) ? key : undefined;
     if (seat === c.peer.seat) return;
     // Somebody on the floor got there first (two people arriving at an empty throne at once).
     // (Not yourself, on a connection that hasn't timed out yet after a reconnect.)

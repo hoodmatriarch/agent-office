@@ -184,7 +184,7 @@ parts.talk = installVoice(ctx, { tv: parts.tv });
 installDictation(ctx);
 parts.hud = installHud(ctx, core, parts);
 installGuide(ctx, parts);
-installFacilities(ctx);
+installFacilities(ctx, { walking: parts.walking });
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

@@ -1,6 +1,7 @@
 import type { MapState } from '../../../shared/protocol';
 import { OFFICE_MAP, planOf, type MapPlan } from '../../../shared/maps';
 import type { Slice } from '../store';
+import { builtinFloor } from '../../../shared/builtin-floors';
 
 declare module '../store' {
   interface Store {
@@ -20,7 +21,7 @@ export const map: Slice = {
   },
   methods: {
     plan() {
-      return planOf(this.map.pick, this.map.custom);
+      return builtinFloor(this.floor)?.plan ?? planOf(this.map.pick, this.map.custom);
     },
   },
   // The map first, so the floor's workers sit down in its seats and not the last one's.
