@@ -1,0 +1,13 @@
+.boss-break-panel {
+  width: min(520px, 92vw);
+  padding: 28px;
+  border-radius: 18px;
+  background: #fffaf0;
+  color: #342d26;
+  box-shadow: 0 20px 70px #0005;
+}
+.boss-break-panel h2 { margin-top: 0; padding-right: 28px; }
+.boss-break-panel p { line-height: 1.5; }
+.boss-break-panel label { display: block; font-weight: 800; margin: 18px 0; }
+.boss-break-panel input { display: block; width: 100%; margin-top: 8px; }
+.boss-break-status { padding: 12px; border-radius: 8px; background: #fff0c2; }
