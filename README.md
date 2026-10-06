@@ -32,7 +32,7 @@ curl -fsSL https://raw.githubusercontent.com/AgentSystemLabs/agent-office/main/i
 
 ## What it is
 
-**Your shared break floor:** food service, two kitchen volunteer roles, a reading library for uploaded books, a persistent drawing desk, document and mood-board organizer, bathrooms, lockers, supplies and roaming staff. Open **Break floor** or choose it in the elevator. Pip now answers guide questions and teaches GitHub. See [the break-floor guide](docs/break-floor.md).
+**Your shared break floor:** take the elevator to **Break floor**, alongside your project floors and rooftop bar. It uses the normal office controls and shared visitor presence, with food service, two kitchen volunteer roles, uploaded books, a persistent drawing desk, documents, mood boards, bathrooms, lockers, supplies and roaming staff. Pip answers guide questions and teaches GitHub. See [the break-floor guide](docs/break-floor.md).
 
 - **A floor per project.** Ride the elevator, pick one of your GitHub repos, and the office clones it (showing how far along it is) and opens a floor for it. Every worker, board and queue on that floor works in that checkout.
 - **Workers at desks.** Walk up to an empty desk, press **E**, and pick Claude Code, Codex, OpenCode, Grok, Muse, DeepSeek Harness, Pi or Cursor, each with its model and reasoning effort. The agent's live terminal shows on its laptop, and anyone can open it and type.

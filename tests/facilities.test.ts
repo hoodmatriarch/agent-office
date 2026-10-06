@@ -6,15 +6,14 @@ import path from 'node:path';
 import { Facilities } from '../src/server/facilities.js';
 import { Shift } from '../src/client/games/kitchen/engine.js';
 import { findLessons } from '../src/client/features/guide/lessons.js';
-import { View } from '../src/client/core/registry.js';
+import { BREAK, builtinFloor } from '../src/shared/builtin-floors.js';
+import { OFFICE_PLAN, seatHereOn } from '../src/shared/maps/index.js';
 
-test('a separate facility view skips hidden rendering while feature updates still run', () => {
-  const view = new View(); let updates = 0, renders = 0, open = true;
-  const off = view.add({ suspendsScene: () => open, update: () => updates++ });
-  view.update(); view.draw({} as never, () => renders++);
-  assert.equal(updates, 1); assert.equal(renders, 0);
-  open = false; view.draw({} as never, () => renders++);
-  assert.equal(renders, 1); off(); assert.equal(view.suspended(), false);
+test('break-floor seating is accepted there and rejected on project floors', () => {
+  const shared = builtinFloor(BREAK)!;
+  assert.ok(seatHereOn(shared.plan, 'break-couch-0:0', false));
+  assert.equal(seatHereOn(OFFICE_PLAN, 'break-couch-0:0', false), undefined);
+  assert.equal(builtinFloor('fake-project'), undefined);
 });
 
 test('facility files persist, stay inside the vault, and are isolated per sign-in', () => {

@@ -31,6 +31,8 @@ export interface Ways {
 }
 
 export interface World {
+  /** A shared floor's own elevator, when its layout differs from the project office. */
+  elevator?: import('./elevator').Elevator;
   plan: MapPlan;
   group: THREE.Group;
   colliders: Collider[];

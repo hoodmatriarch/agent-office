@@ -1,7 +1,8 @@
 import type { Ctx } from '../../core/context';
 import { hintTitle, key, onE } from '../../core/hint';
 import { noOutline } from '../../core/outline';
-import { destinations } from '../../ui/destinations';
+import { BREAK } from '../../../shared/builtin-floors';
+import type { installWalking } from '../walking';
 import { h, toast, modalOpen } from '../../ui/dom';
 import { store } from '../../state';
 import { BreakRoom } from './room';
@@ -18,20 +19,21 @@ import './ui.css';
 declare module '../../world/types' {
   interface InteractKinds {
     facilitiesstaff: true;
+    facility: true;
   }
 }
 
-export function installFacilities(ctx: Ctx) {
+export function installFacilities(ctx: Ctx, deps: { walking: Pick<ReturnType<typeof installWalking>, 'walkThen'> }) {
   const library = new Library(), organizer = new Organizer(), storage = new StorageRoom();
   let room: BreakRoom;
   const food = new FoodService(text => { room.tray = text; });
   const studio = new Studio(() => { if (room.world) { room.world.artCanvas.getContext('2d')!.drawImage(studio.canvas, 0, 0); room.world.artTexture.needsUpdate = true; } });
-  room = new BreakRoom(async id => {
+  room = new BreakRoom(ctx, deps.walking, async id => {
     if (id === 'service') return food.open();
     if (id === 'vending') return food.open(true);
     if (id === 'volunteer') return food.volunteer();
     if (id === 'studio') return studio.open();
-    if (id === 'library') return library.open(book => { room.takeBook(book.title); void library.read(); });
+    if (id === 'library') return library.open(book => { room.takeBook(book.title, () => void library.read()); });
     if (id === 'couch') return food.eat(() => library.read());
     if (id === 'organizer') return organizer.open();
     if (id === 'records') { const p = panel('🗄️ Store room'); p.body.append(action('Employee files', () => storage.files()), action('Work documents, projects & accounting', () => organizer.open()), action('Office supplies', () => storage.inventory())); return; }
@@ -42,9 +44,10 @@ export function installFacilities(ctx: Ctx) {
       p.body.append(h('p', {}, 'A private break-floor restroom with toilets, sinks, mirrors, soap, and paper supplies. June includes both bathrooms in her cleaning rounds.'), action('Wash hands', () => { toast('Hands washed. June approves.'); }), action('Flush toilet', () => { toast('Flushed. Leon’s plumbing survives another day.'); }), action('Check / restock bathroom supplies', () => storage.inventory()));
     }
   }, async () => { await Promise.all([studio.load(), food.data.load()]); food.updateTray(); });
-  destinations.push({ name: '🌿 The break floor · food, books & creative studio', visit: () => room.open() });
-  ctx.view.add({ suspendsScene: () => !!room.world });
-  const call = h('button.btn.fac-call', { type: 'button', 'aria-label': 'Visit the break floor' }, '🌿 Break floor'); call.onclick = () => room.open(); document.body.append(call);
+  ctx.interactions.define('facility', { reach: 3, hint: it => ({ k: it.label ?? '', parts: [hintTitle(it.label ?? 'Break-floor station'), key('E', 'Use')] }), use: onE(it => room.use(it)) });
+  const call = h('button.btn.fac-call', { type: 'button', 'aria-label': 'Find places on the break floor', hidden: true }, '🌿 Floor guide'); call.onclick = () => room.places(); document.body.append(call);
+  const location = h('span.fac-belongings'); document.body.append(location);
+  ctx.ticks.add('hud', () => { call.hidden = store.floor !== BREAK; location.hidden = store.floor !== BREAK; location.textContent = [room.carried,room.tray].filter(Boolean).join(' · '); });
 
   // Staff also keep doing their rounds on normal project floors. Their tools and routes are visual routines.
   const cleaner = new RoutineStaff('June · cleaning lady', [

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { NavGrid, type Rect } from '../../../shared/nav';
 import { mesh, roundedBox, textSprite, toon } from '../../world/toon';
 import { Person } from '../../world/character';
+import type { Collider } from '../../world/types';
 export type Station = 'service' | 'volunteer' | 'library' | 'couch' | 'studio' | 'organizer' | 'records' | 'supplies' | 'locker' | 'vending' | 'men' | 'women' | 'exit';
 export interface Spot { id: Station; name: string; x: number; z: number; approach: [number, number]; object: THREE.Object3D }
 
@@ -10,6 +11,7 @@ export class BreakWorld {
   readonly scene = new THREE.Scene();
   readonly spots: Spot[] = [];
   readonly obstacles: Rect[] = [];
+  readonly colliders: Collider[] = [{ minX: -18, maxX: 18, minZ: -14, maxZ: 14, bottom: -.3, top: 0 }];
   readonly artCanvas = document.createElement('canvas');
   readonly artTexture: THREE.CanvasTexture;
   readonly barista = new Person('Mae · cashier & barista', '#4a8b79', { skin: 2, hair: 2, style: 3 });
@@ -38,7 +40,6 @@ export class BreakWorld {
       this.box(x, height / 2 - 4, z, 3.4, height, 3.5, ['#8fa5ab', '#b8b4a6', '#91a899'][i % 3]);
       for (let y = 0; y < height - 1; y += 1.4) this.box(x - 1.72, y - 3, z, .02, .7, 2.2, '#efdbaa');
     }
-    this.spot('exit', '🛗 Return to your project floor', 0, 12, [0, 10], this.box(0, 1.4, 13.6, 3, 2.8, .25, '#4c746c'));
     this.kitchen(); this.lounge(); this.rooms(); this.dining(); this.creative();
     this.nav = new NavGrid({ minX: -17.6, maxX: 17.6, minZ: -13.6, maxZ: 13.6 }, { rects: this.obstacles, circles: [] });
     this.artCanvas.width = 1200; this.artCanvas.height = 750;
@@ -49,11 +50,11 @@ export class BreakWorld {
   }
   box(x: number, y: number, z: number, w: number, h: number, d: number, color: string, solid = false) {
     const object = mesh(roundedBox(w, h, d, Math.min(.06, w / 5, h / 5, d / 5)), toon(color), x, y, z); this.scene.add(object);
-    if (solid) this.obstacles.push([x - w / 2, x + w / 2, z - d / 2, z + d / 2]);
+    if (solid) { this.obstacles.push([x - w / 2, x + w / 2, z - d / 2, z + d / 2]); this.colliders.push({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2, bottom: y - h / 2, top: y + h / 2 }); }
     return object;
   }
   sign(text: string, x: number, y: number, z: number, width = 3) {
-    const label = textSprite(text); label.position.set(x, y, z); label.scale.set(width, width * .17, 1); this.scene.add(label); return label;
+    const label = textSprite(text, { size: 40, bg: '#fcfaf4', color: '#355348', border: '#b2c6b9' }); label.position.set(x, y, z); label.scale.multiplyScalar(Math.min(width, 2.9) / label.scale.x); this.scene.add(label); return label;
   }
   private spot(id: Station, name: string, x: number, z: number, approach: [number, number], object: THREE.Object3D) {
     const spot = { id, name, x, z, approach, object }; object.userData.station = id; this.spots.push(spot); this.sign(name, x, 2.8, z, Math.min(4.6, Math.max(2.5, name.length * .12)));
