@@ -34,7 +34,7 @@ export const LEARNING: Lesson[] = [
   { id: 'break-floor', icon: '🌿', title: 'The shared break floor', words: 'break floor cafeteria kitchen food coffee burger hotdog meal barista chef order volunteer minigame rush',
     what: 'The break floor is a shared facility, available without creating a GitHub repository. Mae takes orders and makes coffee; Gus cooks the hot food.',
     why: 'You can eat, read, draw, organize files, or volunteer for a kitchen shift while taking a break.',
-    steps: ['Click Break floor on screen or choose it in the elevator.', 'Choose a destination to walk there; press E nearby or click Use.', 'Order food and collect it when ready. The volunteer station lets you play barista or chef in Breakroom Rush.'], term: 'The floor is a separate 3D facility view. Its records and uploads save to the office server’s local data folder.' },
+    steps: ['Choose Break floor in the elevator, alongside your project floors and rooftop bar.', 'Walk around with the usual office controls and press E at a station, or use Floor guide to walk there.', 'Order food and collect it when ready. The volunteer station lets you play barista or chef in Breakroom Rush.'], term: 'The break floor is a shared building destination. Its records and uploads save to the office server’s local data folder outside GitHub.' },
   { id: 'library', icon: '📚', title: 'Upload books and read on the couch', words: 'book books library pdf epub reading read pages page flip bookmark couch lounge upload',
     what: 'The library accepts your PDF, EPUB, TXT, and Markdown books. PDFs keep their original pages; EPUB and text are arranged into reading pages.',
     why: 'You can keep books in the office without adding them to GitHub.',

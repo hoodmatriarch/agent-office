@@ -2,6 +2,7 @@
 // off floors.
 import type { FloorClientMsg } from '../../../shared/protocol.js';
 import { ROOF } from '../../../shared/rooftop.js';
+import { builtinFloor } from '../../../shared/builtin-floors.js';
 import { arrivalSpot, str } from '../../office/input.js';
 import type { HandlerMap, ViewPieces } from './types.js';
 
@@ -9,6 +10,7 @@ export const projectView: ViewPieces['project'] = (_ctx, floor) => floor?.projec
 
 export const floorHandlers = {
   'floor.go'(ctx, c, msg) {
+    if (builtinFloor(msg.floor)) return ctx.goToBuiltinFloor(c, msg.floor);
     if (msg.floor === ROOF) {
       if (ctx.floors.size) ctx.goToRoof(c);
       else ctx.warn(c, 'There is no building to go up on yet');

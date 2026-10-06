@@ -8,6 +8,7 @@
 import { OFFICE_PLAN } from '../../shared/maps';
 import { SLAB, inElevator } from '../../shared/layout';
 import { ROOF, ROOF_NAME } from '../../shared/rooftop';
+import { builtinFloor, BUILTIN_FLOORS } from '../../shared/builtin-floors';
 import { renderTitle } from '../shared/title';
 import { lastFloor, lastSpot, store, type Spot } from '../state';
 import { routeAccountsMessage } from '../ui/accounts';
@@ -178,8 +179,10 @@ export function installArrival(ctx: Ctx, core: CoreState, parts: ArrivalParts) {
   function renderProject() {
     const p = store.project;
     renderTitle();
+    const shared = builtinFloor(store.floor);
+    if (shared) { $('project-meta').classList.remove('lobby'); $('project-name').textContent = `${shared.icon} ${shared.name}`; $('project-meta').textContent = '🛗 Shared floor · food, books & creative tools'; ctx.world().setProjectName(shared.name); return; }
     if (store.floor === ROOF) {
-      const n = builtFloors().length;
+      const n = builtFloors().length + BUILTIN_FLOORS.size;
       $('project-meta').classList.remove('lobby');
       $('project-name').textContent = `🍸 ${ROOF_NAME}`;
       $('project-meta').textContent = `🛗 on top of ${n} floor${n === 1 ? '' : 's'} · 🎧 drum & bass`;
@@ -196,7 +199,7 @@ export function installArrival(ctx: Ctx, core: CoreState, parts: ArrivalParts) {
     const n = store.floors.findIndex((f) => f.id === store.floor);
     $('project-meta').classList.remove('lobby');
     $('project-name').textContent = `🏢 ${p.name}`;
-    $('project-meta').textContent = [n >= 0 && `🛗 floor ${n + 1} of ${store.floors.length}`, p.branch && `⎇ ${p.branch}`, p.dir, `default: ${providerLabel(p.defaultProvider, p)}`].filter(Boolean).join(' · ');
+    $('project-meta').textContent = [n >= 0 && `🛗 floor ${n + 1} of ${store.floors.length + BUILTIN_FLOORS.size}`, p.branch && `⎇ ${p.branch}`, p.dir, `default: ${providerLabel(p.defaultProvider, p)}`].filter(Boolean).join(' · ');
     ctx.world().setProjectName(p.name);
   }
   store.on('floors', renderProject);

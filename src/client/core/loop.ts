@@ -50,7 +50,6 @@ export function installLoop(ctx: Ctx, core: CoreState, parts: Pick<Parts, 'stage
 
   /** Frames coming too slowly for the 3D to be any fun: the 2D view is offered. */
   function watchFrameRate({ now, delta }: Frame) {
-    if (ctx.view.suspended()) return;
     if (slowFrames.frame(now, delta * 1000)) deps.offer2d('slow');
   }
 
