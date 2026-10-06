@@ -6,6 +6,7 @@ import type { Net } from '../net';
 import { store } from '../state';
 import { h, openModal, timeAgo, toast, type Modal } from './dom';
 import { confirmDialog } from './prompt';
+import { BUILTIN_FLOORS } from '../../shared/builtin-floors';
 
 // The elevator's panel: a button for every floor (every project), and "add a project", which clones
 // one of the repositories the office's gh login can see and makes it a new floor. The first time
@@ -220,6 +221,11 @@ export function openElevator(opts: ElevatorOptions): void {
     // Top floor first, the way an elevator's buttons stack, with the roof over them, floor 1 and then the garage at the bottom.
     floorsEl.replaceChildren(
       ...(built ? [roofButton()] : []),
+      ...[...BUILTIN_FLOORS.values()].map(f => {
+        const here = store.floor === f.id, people = [...store.peers.values()].filter(p => p.floor === f.id).length;
+        const button = h('button.floor-btn', { type: 'button', class: here ? 'here' : '', disabled: here, title: here ? "You're on this floor" : `Ride to the ${f.name.toLowerCase()}` }, h('span.floor-no', { style: 'background:#537b65' }, f.icon), h('span.floor-text', {}, h('span.floor-name', {}, f.name, here ? h('span.here-tag', {}, 'you are here') : null), h('span.floor-sub', {}, f.description)), h('span.floor-stats', {}, people ? `🧑 ${people}` : ''));
+        button.onclick = () => { if (!here) { modal.close(); opts.ride(f.id); } }; return button;
+      }),
       ...(floors.length ? floors.map(floorRow).reverse() : [h('p.empty', {}, 'No floors yet.')]),
       ...(built ? [garageButton()] : []),
     );

@@ -28,6 +28,9 @@ import { installKeyboard, installKeyGuards } from './input/keyboard';
 import { installFocus } from './input/focus';
 import { installPointer } from './input/pointer';
 import { installArcade } from './features/arcade';
+import { installBossBreak } from './features/boss-break';
+import { installGuide } from './features/guide';
+import { installFacilities } from './features/facilities';
 import { installBar } from './features/bar';
 import { installBarGames } from './features/bargames';
 import { installBasketball } from './features/basketball';
@@ -102,6 +105,7 @@ parts.confetti = new Confetti((x, z, y) => groundAt(ctx.player.colliders, x, z, 
 ctx.scene.add(parts.confetti.mesh);
 parts.tv = installTv(ctx, { shares: () => parts.talk.currentShares(), watch: () => parts.talk.watchShare() });
 parts.arcade = installArcade(ctx);
+installBossBreak(ctx, { playing: () => parts.arcade.zoomed });
 parts.rooftop = installRooftop(ctx, { ambient: parts.stage.ambient, hemi: parts.stage.hemi });
 
 // You, and how you talk to the office.
@@ -179,6 +183,8 @@ installChat(ctx);
 parts.talk = installVoice(ctx, { tv: parts.tv });
 installDictation(ctx);
 parts.hud = installHud(ctx, core, parts);
+installGuide(ctx, parts);
+installFacilities(ctx, { walking: parts.walking });
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

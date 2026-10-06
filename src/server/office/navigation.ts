@@ -6,9 +6,16 @@ import type { Ctx, Navigation } from './context.js';
 import type { Client } from './client.js';
 import type { Spot } from './input.js';
 import { floorView, roofView, screensOf } from './views.js';
+import { builtinFloor } from '../../shared/builtin-floors.js';
 
 /** Taking people between the floors, the roof and the lobby. */
 export function navigation(ctx: Ctx): Navigation {
+  const goToBuiltinFloor = (c: Client, id: string) => {
+    const shared = builtinFloor(id); if (!shared || c.peer.floor === id) return;
+    const after = leave(c, shared.plan.spawn); c.peer.floor = id;
+    ctx.sendTo(c, { t: 'floor.enter', peers: [...ctx.clients.values()].map(o => o.peer), ...floorView(ctx, undefined), floor: id });
+    arrived(c, after); ctx.floorsChanged();
+  };
   /**
    * Takes `c` to another floor: everyone sees them leave and arrive, and they get the new floor's
    * everything. They arrive in the elevator, or `at` the spot they came by.
@@ -65,5 +72,5 @@ export function navigation(ctx: Ctx): Navigation {
     for (const then of after) then();
   };
 
-  return { goToFloor, goToRoof, toLobby };
+  return { goToFloor, goToRoof, goToBuiltinFloor, toLobby };
 }

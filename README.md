@@ -32,6 +32,8 @@ curl -fsSL https://raw.githubusercontent.com/AgentSystemLabs/agent-office/main/i
 
 ## What it is
 
+**Your shared break floor:** take the elevator to **Break floor**, alongside your project floors and rooftop bar. It uses the normal office controls and shared visitor presence, with food service, two kitchen volunteer roles, uploaded books, a persistent drawing desk, documents, mood boards, bathrooms, lockers, supplies and roaming staff. Pip answers guide questions and teaches GitHub. See [the break-floor guide](docs/break-floor.md).
+
 - **A floor per project.** Ride the elevator, pick one of your GitHub repos, and the office clones it (showing how far along it is) and opens a floor for it. Every worker, board and queue on that floor works in that checkout.
 - **Workers at desks.** Walk up to an empty desk, press **E**, and pick Claude Code, Codex, OpenCode, Grok, Muse, DeepSeek Harness, Pi or Cursor, each with its model and reasoning effort. The agent's live terminal shows on its laptop, and anyone can open it and type.
 - **Talk instead of typing.** Hold **Ctrl+Space** (or the **🎤**) in a worker's terminal or a prompt box and say what you want: it's typed in for you to send. Your browser does the listening, so there's nothing to install.
@@ -46,6 +48,10 @@ curl -fsSL https://raw.githubusercontent.com/AgentSystemLabs/agent-office/main/i
 There's a lot more (a rooftop bar, an office dog, an arcade, supercars in the garage to drive round a scenic loop past a farm, pines, mountains and a beach): see [docs/features.md](docs/features.md).
 
 ## Requirements
+
+**New to coding?** Pip, the blue office guide, walks around the floor and explains the tools in everyday language. Press **F2**, click **Ask Pip**, or press **E** near him for a walking tour, examples of what to ask a worker, and a searchable tool guide. Pip uses built-in explanations without coding-agent usage. See [the beginner guide](docs/guide.md).
+
+The boss’s upstairs computer can loop your own copy of the original American *Office* intro silently while its theme plays from that desk every 15 minutes, at 80% in the boss office and 45% in the main work area. Use **E** at the **World’s Best Boss** plaque to select the video and control the theme. Minesweeper still works from the boss’s chair. See [boss-room playback](docs/boss-room.md).
 
 On the machine that runs the office:
 

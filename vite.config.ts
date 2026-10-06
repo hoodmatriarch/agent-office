@@ -52,6 +52,7 @@ export default defineConfig({
         warn(warning);
       },
       input: {
+        kitchen: resolve(import.meta.dirname, 'src/client/kitchen.html'),
         main: resolve(import.meta.dirname, 'src/client/index.html'),
         lite: resolve(import.meta.dirname, 'src/client/lite.html'),
         login: resolve(import.meta.dirname, 'src/client/login.html'),
