@@ -1,3 +1,4 @@
+import { LEARNING } from './learning';
 export interface Lesson {
   id: string;
   icon: string;
@@ -21,6 +22,7 @@ export const LESSONS: Lesson[] = [
     example: 'I am new to coding. Make a simple page with my name and a welcome message. First explain your plan in plain English. Tell me how to view the result.',
     term: 'A prompt is simply the instruction you give a worker.', at: [-4.5, 0],
   },
+  ...LEARNING,
   {
     id: 'projects', icon: '🏢', title: 'Floors and repositories', words: 'floor project repository repo github folder elevator files',
     what: 'Each floor is one project. A repository, often shortened to “repo,” is that project’s files plus a record of changes.',
@@ -120,7 +122,7 @@ export const LESSONS: Lesson[] = [
 ];
 
 export const TOUR = ['projects', 'workers', 'issues', 'queue', 'pulls', 'services', 'together', 'breaks'] as const;
-export const lessonById = (id: string): Lesson => LESSONS.find(lesson => lesson.id === id) ?? LESSONS[0];
+export const lessonById = (id: string): Lesson => LESSONS.find(lesson => lesson.id === id) ?? LESSONS.find(lesson => lesson.id === 'start')!;
 
 /** Match the whole phrase or useful words; “what is a pull request?” must not match every article. */
 export function findLessons(query: string): Lesson[] {

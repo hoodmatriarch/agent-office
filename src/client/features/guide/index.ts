@@ -8,6 +8,7 @@ import { lessonById, TOUR, type Lesson } from './lessons';
 import { GuideHelp, GuideTourCard, type GuideActions } from './ui';
 import { GuideWalker } from './walker';
 import { GuideBot } from './world';
+import { guideAccess } from './access';
 
 declare module '../../world/types' {
   interface InteractKinds {
@@ -64,6 +65,7 @@ export function installGuide(ctx: Ctx, deps: Pick<Parts, 'walking'>) {
   const help = new GuideHelp(actions);
   const card = new GuideTourCard(actions, id => help.show(id));
   const ask = () => help.show(tour >= 0 ? TOUR[tour] : 'start');
+  guideAccess.show = ask;
   const call = h('button.btn.guide-call', { type: 'button', title: 'F2 · Free office guide', 'aria-label': 'Ask Pip, your office guide' }, '🤖 Ask Pip');
   call.onclick = ask; document.body.append(call);
   ctx.usables.add({ usable: () => bot.root.visible ? [bot.interact] : [], pickable: () => bot.root });
