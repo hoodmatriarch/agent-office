@@ -7,6 +7,7 @@ import type { Interactable } from '../../world/types';
 import { BreakSchedule } from './schedule';
 import { BossSound } from './sound';
 import { mediaFile } from './storage';
+import { BOSS_LEVEL, WORK_LEVEL, roomLevel } from './levels';
 import './ui.css';
 
 declare module '../../world/types' {
@@ -31,7 +32,8 @@ export function installBossBreak(ctx: Ctx, deps: { playing(): boolean }) {
   let url = '';
   let fileName = '';
   let ready = false;
-  let volume = 0.5;
+  let bossVolume = BOSS_LEVEL;
+  let workVolume = WORK_LEVEL;
   let modal: Modal | null = null;
   let status: HTMLElement | null = null;
   const message = (text: string) => { if (status) status.textContent = text; };
@@ -81,20 +83,24 @@ export function installBossBreak(ctx: Ctx, deps: { playing(): boolean }) {
     if (modal) return;
     const input = h('input', { type: 'file', accept: 'video/*', 'aria-label': 'Original U.S. Office intro video' });
     status = h('p.boss-break-status', { role: 'status' }, ready ? `${fileName} · muted video loops continuously · theme every 15 minutes` : 'No intro loaded. Minesweeper is still available.');
-    const level = h('input', { type: 'range', min: 0, max: 100, value: Math.round(volume * 100), 'aria-label': 'Boss theme volume' });
-    const percent = h('span', {}, `${Math.round(volume * 100)}%`);
+    const level = h('input', { type: 'range', min: 0, max: 100, value: Math.round(bossVolume * 100), 'aria-label': 'Boss office theme volume' });
+    const percent = h('span', {}, `${Math.round(bossVolume * 100)}%`);
+    const workLevel = h('input', { type: 'range', min: 0, max: 100, value: Math.round(workVolume * 100), 'aria-label': 'Main work office theme volume' });
+    const workPercent = h('span', {}, `${Math.round(workVolume * 100)}%`);
     const preview = h('button.btn', { type: 'button' }, 'Play theme now');
     const panel = h('section.boss-break-panel', {},
       h('h2', {}, 'The boss is “supervising”'),
       h('p', {}, 'The original American Office opening. Bring your own video copy; no covers or substitute recordings are bundled.'),
       h('label', {}, 'Intro video', input),
       status,
-      h('label', {}, 'Theme volume ', percent, level),
-      h('p', {}, 'The theme plays once every 15 minutes from this computer, fading with distance. The screen loops silently. Sit in the boss’s chair and press E to play Minesweeper.'),
+      h('label', {}, 'Boss office volume ', percent, level),
+      h('label', {}, 'Main work office volume ', workPercent, workLevel),
+      h('p', {}, 'The theme plays once every 15 minutes from this computer, with separate levels in the boss office and the main work area. The screen loops silently. Sit in the boss’s chair and press E to play Minesweeper.'),
       preview,
       h('p', {}, 'Your video stays in this browser. Playback runs while this office page is open.'),
     );
-    level.oninput = () => { volume = Number(level.value) / 100; percent.textContent = `${level.value}%`; };
+    level.oninput = () => { bossVolume = Number(level.value) / 100; percent.textContent = `${level.value}%`; };
+    workLevel.oninput = () => { workVolume = Number(workLevel.value) / 100; workPercent.textContent = `${workLevel.value}%`; };
     input.onchange = async () => {
       const file = input.files?.[0];
       if (!file) return;
@@ -134,7 +140,7 @@ export function installBossBreak(ctx: Ctx, deps: { playing(): boolean }) {
     } else video.pause();
     showVideo();
     const audible = active && ready && !ctx.settings.muted && !ctx.settings.musicMuted;
-    sound.update(ctx.camera, screen, volume * ctx.settings.volume, audible);
+    sound.update(ctx.camera, screen, roomLevel(ctx.player.pos, bossVolume, workVolume) * ctx.settings.volume, audible);
     if (schedule.due(Date.now(), audible)) void sound.play();
   });
   void mediaFile().then(file => file && load(file)).catch(() => toast('Boss TV: choose the intro again from the World’s Best Boss plaque.', 'warn'));

@@ -24,7 +24,9 @@ export class BossSound {
       this.panner.panningModel = 'HRTF';
       this.panner.distanceModel = 'inverse';
       this.panner.refDistance = 2;
-      this.panner.rolloffFactor = 2;
+      // Room gains already set the desired level; keep directional positioning without
+      // attenuating the main office's 45% a second time with distance.
+      this.panner.rolloffFactor = 0;
       this.panner.maxDistance = 40;
       this.tone = audio.createBiquadFilter();
       this.tone.type = 'lowpass';
