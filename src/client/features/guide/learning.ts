@@ -1,6 +1,11 @@
 import type { Lesson } from './lessons';
 /** Beginner learning is grounded in the actual office tools, rather than invented AI capabilities. */
 export const LEARNING: Lesson[] = [
+  { id: 'study-hall', icon: '🎓', title: 'Classroom, study library and homework', words: 'class classroom study hall teacher professor curriculum lecture lesson test homework backpack highlight notes learning',
+    what: 'The Classroom & study hall is its own elevator floor, with desks, Professor Ellis, a whiteboard and a separate subject library.',
+    why: 'You can keep learning material, notes and homework together without putting them in GitHub.',
+    steps: ['Take the elevator to Classroom & study hall. Use E at a desk or open Class & study tools.', 'Add reading material by subject in the library. Sit and read with notes, and select text to highlight passages.', 'Raise your hand for guided help. Homework can stay in your backpack or your break-floor locker.'],
+    term: 'The teacher presents saved lesson material and learning guidance. Curriculum content, automatic grading and an AI tutor will be added separately.' },
   { id: 'git-start', icon: '🐙', title: 'Learn GitHub: what it is and why it helps', words: 'learn github git beginner explain understand tutorial utilise use online coding',
     what: 'GitHub is an online home for project files, their history, and conversations about changes. Think of it as a shared project cabinet with a record of who changed what.',
     why: 'Your workers can build a project locally and propose their work on GitHub, where you can review it before accepting it.',

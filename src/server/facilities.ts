@@ -2,7 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import path from 'node:path';
 
-export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen'] as const;
+export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library'] as const;
 export type Bucket = typeof BUCKETS[number];
 export const MAX_ASSET = 80 * 1024 * 1024;
 export interface Asset { id: string; name: string; type: string; size: number }

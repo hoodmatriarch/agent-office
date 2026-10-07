@@ -65,22 +65,26 @@ export class BreakWorld {
   }
   private kitchen() {
     this.box(-9, .015, -10, 16, .03, 7, '#e4dfce');
-    this.box(-10, .65, -6.2, 13, 1.3, 1.1, '#466d5e', true); this.box(-10, 1.34, -6.2, 13.4, .15, 1.25, '#f5ead3');
+    const counter = this.box(-10, .43, -6.2, 13, .86, 1.1, '#466d5e', true); this.box(-10, .91, -6.2, 13.4, .10, 1.25, '#f5ead3');
     this.box(-13, .7, -12.3, 8, 1.4, 1.5, '#bdc6bd', true);
     for (let i = 0; i < 3; i++) { this.box(-14 + i * 1.4, 1.43, -12.2, 1, .1, .9, '#2f3e42'); this.scene.add(mesh(new THREE.CylinderGeometry(.28, .28, .09, 16), toon('#b9b7ac'), -14 + i * 1.4, 1.55, -12.2)); }
     this.box(-7, 1.7, -12.5, 1.6, 3.4, 1.1, '#dee7df', true); this.box(-7, 1.7, -11.92, .07, .6, .05, '#596d67');
     this.box(-5, 1.6, -6.2, 1.1, .6, .7, '#283f3e'); this.box(-5, 1.91, -6.15, .8, .12, .6, '#d0b899');
     for (let x = -5.3; x < -4.7; x += .3) this.scene.add(mesh(new THREE.CylinderGeometry(.09, .07, .18, 12), toon('#ffefd0'), x, 1.5, -5.75));
-    const cabinet = this.box(-10, 1.72, -6.1, 3.5, .7, .8, '#a2cbc0');
-    this.box(-10, 1.76, -5.67, 3.2, .45, .03, '#d6e8e6');
-    for (let i = 0; i < 6; i++) this.scene.add(mesh(new THREE.ConeGeometry(.16, .22, 3), toon('#e3c084'), -11.1 + i * .43, 1.65, -5.58));
+    this.box(-10, 1.23, -6.1, 3.5, .55, .8, '#a2cbc0');
+    this.box(-10, 1.25, -5.67, 3.2, .4, .03, '#d6e8e6');
+    for (let i = 0; i < 6; i++) this.scene.add(mesh(new THREE.ConeGeometry(.16, .22, 3), toon('#e3c084'), -11.1 + i * .43, 1.18, -5.58));
     this.barista.root.position.set(-5, 0, -7.6); this.chef.root.position.set(-12, 0, -10.8); this.scene.add(this.barista.root, this.chef.root);
     this.chef.root.add(mesh(new THREE.CylinderGeometry(.24, .28, .4, 12), toon('#fffcf0'), 0, 1.95, 0));
-    this.spot('service', '☕ Mae & Gus · order food', -8, -6.2, [-8, -4.6], cabinet);
+    this.spot('service', '☕ Mae & Gus · order food', -8, -6.2, [-8, -4.6], counter);
+    this.spot('service', '☕ Mae · cashier & barista', -5, -7.6, [-5, -4.6], this.barista.root);
+    this.spot('volunteer', '👨‍🍳 Gus · chef & kitchen shifts', -12, -10.8, [-8, -4.6], this.chef.root);
     this.spot('volunteer', '🍳 Volunteer kitchen shifts', -14.5, -5.3, [-14.5, -3.5], this.box(-14.5, 1.4, -5.3, .7, 1.2, .3, '#dd9a6b'));
-    this.box(-3, 1.05, -1.8, 1.4, 2.1, 1, '#497891', true); const vending = this.box(-3, 1.3, -1.26, .95, 1.1, .04, '#dbe8e9');
-    for (let i = 0; i < 9; i++) this.box(-3.3 + i % 3 * .3, .9 + Math.floor(i / 3) * .3, -1.2, .16, .2, .12, ['#e2b95c', '#cb765c', '#7fa880'][i % 3]);
-    this.spot('vending', '🥤 Vending machine', -3, -1.4, [-3, .3], vending);
+    const vending = this.box(3, 1.05, -12.9, 1.4, 2.1, 1, '#497891', true);
+    this.box(3, 1.3, -12.36, .95, 1.1, .04, '#dbe8e9');
+    for (let i = 0; i < 9; i++) this.box(2.7 + i % 3 * .3, .9 + Math.floor(i / 3) * .3, -12.3, .16, .2, .12, ['#e2b95c', '#cb765c', '#7fa880'][i % 3]);
+    this.box(3.53, 1.2, -12.35, .12, .35, .04, '#182e35'); this.box(3, .35, -12.35, .8, .2, .08, '#182e35');
+    this.spot('vending', '🥤 Vending machine', 3, -12.4, [3, -10.8], vending);
   }
   private lounge() {
     this.box(11, .03, -4, 12, .035, 12, '#b9ccc3');

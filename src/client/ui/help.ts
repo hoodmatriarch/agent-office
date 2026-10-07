@@ -4,6 +4,7 @@
 import { IS_MAC } from './termkeys';
 
 export const HELP_ROWS: readonly (readonly [string, string])[] = [
+  ['🎓', 'Classroom & study hall: take the elevator, choose a desk, read subject material with notes and highlights, raise your hand, and keep homework in your backpack or break-floor locker'],
   ['W A S D', 'Walk (hold Shift to run)'],
   ['Space', 'Jump'],
   ['☕', 'Press E at the coffee machine in the kitchen for a minute of quicker walking and higher jumps. Three cups in a row gives you the jitters'],

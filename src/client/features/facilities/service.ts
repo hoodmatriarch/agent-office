@@ -9,8 +9,8 @@ export class FoodService {
   readonly data = new Collection<{ orders: Order[]; scores: Score[] }>('kitchen', { orders: [], scores: [] });
   constructor(private readonly tray: (text: string) => void) {}
   updateTray() { this.tray(this.data.value.orders.filter(order => order.served && !order.eaten).map(order => MENU[order.food].icon + ' ' + MENU[order.food].name).join(', ')); }
-  async open(vending = false) {
-    await this.data.load(); this.updateTray(); const { body, modal } = panel(vending ? '🥤 Vending machine' : '☕ Mae & Gus · food and drink service', true);
+  async open() {
+    await this.data.load(); this.updateTray(); const { body, modal } = panel('☕ Mae & Gus · food and drink service', true);
     const queue = h('div.fac-grid');
     const render = () => {
       queue.replaceChildren(...this.data.value.orders.filter(order => !order.eaten).map(order => {
@@ -19,7 +19,7 @@ export class FoodService {
       }));
       Array.from(queue.children).forEach((card, i) => { const order = this.data.value.orders.filter(o => !o.eaten)[i]; const button = card.querySelector('button'); if (button) button.disabled = order.served || Date.now() < order.readyAt; });
     };
-    body.append(h('p', {}, vending ? 'Ready-made drinks and sandwiches. Take them to a dining table or the lounge.' : 'Mae takes your order and makes coffee; Gus cooks the hot food. These are virtual office meals. The starting menu is ready to expand later.'), h('div.fac-toolbar', {}, ...(Object.keys(MENU) as Food[]).filter(food => !vending || ['soda', 'sandwich'].includes(food)).map(food => action(`${MENU[food].icon} Order ${MENU[food].name}`, async () => {
+    body.append(h('p', {}, 'Mae takes your order and makes coffee; Gus cooks the hot food. These are virtual office meals. The starting menu is ready to expand later.'), action('Volunteer · play Breakroom Rush', () => { modal.close(); return this.volunteer(); }), h('div.fac-toolbar', {}, ...(Object.keys(MENU) as Food[]).map(food => action(`${MENU[food].icon} Order ${MENU[food].name}`, async () => {
       if (this.data.value.orders.filter(o => !o.eaten).length >= 12) throw new Error('Enjoy the food on your tray before ordering more.');
       this.data.value.orders.push({ id: crypto.randomUUID(), food, readyAt: Date.now() + (food === 'coffee' ? 5000 : MENU[food].time * 1000), served: false, eaten: false }); await this.data.save(); render();
     }))), queue, action('Ask the kitchen to hurry', () => { const game = new Shift('barista'); toast(game.hurry()); }));

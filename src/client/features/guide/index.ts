@@ -9,7 +9,7 @@ import { GuideHelp, GuideTourCard, type GuideActions } from './ui';
 import { GuideWalker } from './walker';
 import { GuideBot } from './world';
 import { guideAccess } from './access';
-import { BREAK } from '../../../shared/builtin-floors';
+import { BREAK, builtinFloor } from '../../../shared/builtin-floors';
 
 declare module '../../world/types' {
   interface InteractKinds {
@@ -30,7 +30,7 @@ export function installGuide(ctx: Ctx, deps: Pick<Parts, 'walking'>) {
   let pause = 4;
   let floor: string | null = null;
   const available = () => ctx.inOffice() && !ctx.upTop() && !ctx.trip() && !!store.floor;
-  const present = () => available() || (store.floor === BREAK && !ctx.trip());
+  const present = () => available() || (!!builtinFloor(store.floor) && !ctx.trip());
   const go = (lesson: Lesson) => {
     if (lesson.at) walker.go(ctx.world().nav, lesson.at);
     arrived = false; waiting = false;
@@ -100,7 +100,7 @@ export function installGuide(ctx: Ctx, deps: Pick<Parts, 'walking'>) {
         }
       } else if (tour < 0) {
         pause -= dt;
-        if (pause <= 0) { if (store.floor === BREAK) { const stops: [number,number][] = [[0,8],[-6,-4],[12,-9],[6,2]]; roam = (roam+1) % stops.length; walker.go(ctx.world().nav, stops[roam]); pause = 5; } else { roam = (roam + 1) % TOUR.length; go(lessonById(TOUR[roam])); } }
+        if (pause <= 0) { if (builtinFloor(store.floor)) { const stops: [number,number][] = store.floor === BREAK ? [[0,8],[-6,-4],[12,-9],[6,2]] : [[0,8],[-5,7],[12,6],[7,-8]]; roam = (roam+1) % stops.length; walker.go(ctx.world().nav, stops[roam]); pause = 5; } else { roam = (roam + 1) % TOUR.length; go(lessonById(TOUR[roam])); } }
       }
     }
     const walking = walker.walking && !paused;
