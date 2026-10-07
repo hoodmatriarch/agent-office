@@ -69,8 +69,8 @@ export class BreakWorld {
     this.box(-13, .7, -12.3, 8, 1.4, 1.5, '#bdc6bd', true);
     for (let i = 0; i < 3; i++) { this.box(-14 + i * 1.4, 1.43, -12.2, 1, .1, .9, '#2f3e42'); this.scene.add(mesh(new THREE.CylinderGeometry(.28, .28, .09, 16), toon('#b9b7ac'), -14 + i * 1.4, 1.55, -12.2)); }
     this.box(-7, 1.7, -12.5, 1.6, 3.4, 1.1, '#dee7df', true); this.box(-7, 1.7, -11.92, .07, .6, .05, '#596d67');
-    this.box(-5, 1.6, -6.2, 1.1, .6, .7, '#283f3e'); this.box(-5, 1.91, -6.15, .8, .12, .6, '#d0b899');
-    for (let x = -5.3; x < -4.7; x += .3) this.scene.add(mesh(new THREE.CylinderGeometry(.09, .07, .18, 12), toon('#ffefd0'), x, 1.5, -5.75));
+    this.box(-5, 1.26, -6.2, 1.1, .6, .7, '#283f3e'); this.box(-5, 1.57, -6.15, .8, .12, .6, '#d0b899');
+    for (let x = -5.3; x < -4.7; x += .3) this.scene.add(mesh(new THREE.CylinderGeometry(.09, .07, .18, 12), toon('#ffefd0'), x, 1.05, -5.75));
     this.box(-10, 1.23, -6.1, 3.5, .55, .8, '#a2cbc0');
     this.box(-10, 1.25, -5.67, 3.2, .4, .03, '#d6e8e6');
     for (let i = 0; i < 6; i++) this.scene.add(mesh(new THREE.ConeGeometry(.16, .22, 3), toon('#e3c084'), -11.1 + i * .43, 1.18, -5.58));
