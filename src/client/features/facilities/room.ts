@@ -22,7 +22,15 @@ export class BreakRoom {
   private build() {
     if (this.native) return this.native;
     const world = this.world = new BreakWorld();
-    const interactions = world.spots.map(spot => { const it: Interactable = { kind: 'facility', label: spot.name, x: spot.x, z: spot.z, radius: 1.2 }; spot.object.userData.interact = it; this.stations.set(it, spot.id); return it; });
+    const interactions = world.spots.map(spot => {
+      const it: Interactable = { kind: 'facility', label: spot.name, x: spot.approach[0], z: spot.approach[1], radius: 2 };
+      spot.object.userData.interact = it;
+      // A clear eye-level control sits in front of furniture rather than behind the counter or desk.
+      const control = world.box(spot.approach[0], 1.15, spot.approach[1] - .35, .65, .45, .12, '#537d70');
+      control.userData.interact = it;
+      const label = world.sign('E · Use', spot.approach[0], 1.5, spot.approach[1] - .35, .75); label.userData.interact = it;
+      this.stations.set(it, spot.id); return it;
+    });
     this.native = nativeBreakWorld(world, interactions);
     void Promise.resolve(this.ready()).catch(error => toast((error as Error).message, 'error'));
     return this.native;

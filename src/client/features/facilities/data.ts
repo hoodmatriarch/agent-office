@@ -1,16 +1,22 @@
-export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen';
+export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen' | 'vending' | 'study' | 'study-library';
 export interface Asset { id: string; name: string; type: string; size: number }
 export class Collection<T> {
   revision = 0;
+  private saving: Promise<void> = Promise.resolve();
   constructor(readonly bucket: Bucket, public value: T) {}
   async load() {
+    await this.saving.catch(() => {});
     const saved = await request(`/api/facilities/state?bucket=${this.bucket}`);
     this.revision = saved.revision; if (saved.value !== null) this.value = saved.value as T;
     return this.value;
   }
-  async save() {
-    const saved = await request(`/api/facilities/state?bucket=${this.bucket}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: this.revision, value: this.value }) });
-    this.revision = saved.revision;
+  save() {
+    const next = this.saving.catch(() => {}).then(async () => {
+      const saved = await request(`/api/facilities/state?bucket=${this.bucket}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: this.revision, value: this.value }) });
+      this.revision = saved.revision;
+    });
+    this.saving = next;
+    return next;
   }
 }
 export async function request(url: string, options?: RequestInit) {

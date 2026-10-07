@@ -1,5 +1,6 @@
 import type { ClientMsg, ServerMsg } from '../shared/protocol';
 import { lastFloor, store, type Profile, type Spot } from './state';
+import { BrowserPresence } from './browser-presence';
 
 type Handler = (msg: ServerMsg) => void;
 
@@ -17,6 +18,7 @@ export class Net {
   /** The server is restarting on purpose: retry every second instead of backing off. */
   private restartExpected = false;
   up = false;
+  private presence = new BrowserPresence(() => { this.closedByUs = true; this.ws?.close(); }, () => { this.closedByUs = false; this.connect(); });
 
   constructor(
     private profile: () => Profile,
@@ -35,6 +37,8 @@ export class Net {
   }
 
   connect() {
+    if (this.closedByUs) return;
+    this.presence.claim();
     const { name, color, look } = this.profile();
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
     const q = new URLSearchParams({ name, color, skin: String(look.skin), hair: String(look.hair), style: String(look.style) });
@@ -79,7 +83,7 @@ export class Net {
         // offline; keep retrying
       }
       const delay = this.restartExpected ? 1000 : Math.min(8000, 500 * 2 ** this.retry++);
-      setTimeout(() => this.connect(), delay);
+      setTimeout(() => { if (!this.closedByUs) this.connect(); }, delay);
     };
   }
 

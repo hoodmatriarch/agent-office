@@ -11,6 +11,7 @@ import { Library } from './library';
 import { Organizer } from './organizer';
 import { StorageRoom } from './storage-ui';
 import { FoodService } from './service';
+import { VendingMachine } from './vending';
 import { RoutineStaff } from './staff';
 import { panel, action } from './panels';
 import type { Interactable } from '../../world/types';
@@ -27,10 +28,11 @@ export function installFacilities(ctx: Ctx, deps: { walking: Pick<ReturnType<typ
   const library = new Library(), organizer = new Organizer(), storage = new StorageRoom();
   let room: BreakRoom;
   const food = new FoodService(text => { room.tray = text; });
+  const vending = new VendingMachine();
   const studio = new Studio(() => { if (room.world) { room.world.artCanvas.getContext('2d')!.drawImage(studio.canvas, 0, 0); room.world.artTexture.needsUpdate = true; } });
   room = new BreakRoom(ctx, deps.walking, async id => {
     if (id === 'service') return food.open();
-    if (id === 'vending') return food.open(true);
+    if (id === 'vending') return vending.open();
     if (id === 'volunteer') return food.volunteer();
     if (id === 'studio') return studio.open();
     if (id === 'library') return library.open(book => { room.takeBook(book.title, () => void library.read()); });
@@ -47,7 +49,7 @@ export function installFacilities(ctx: Ctx, deps: { walking: Pick<ReturnType<typ
   ctx.interactions.define('facility', { reach: 3, hint: it => ({ k: it.label ?? '', parts: [hintTitle(it.label ?? 'Break-floor station'), key('E', 'Use')] }), use: onE(it => room.use(it)) });
   const call = h('button.btn.fac-call', { type: 'button', 'aria-label': 'Find places on the break floor', hidden: true }, '🌿 Floor guide'); call.onclick = () => room.places(); document.body.append(call);
   const location = h('span.fac-belongings'); document.body.append(location);
-  ctx.ticks.add('hud', () => { call.hidden = store.floor !== BREAK; location.hidden = store.floor !== BREAK; location.textContent = [room.carried,room.tray].filter(Boolean).join(' · '); });
+  ctx.ticks.add('hud', () => { call.hidden = store.floor !== BREAK || modalOpen(); location.hidden = store.floor !== BREAK || modalOpen(); location.textContent = [room.carried,room.tray].filter(Boolean).join(' · '); });
 
   // Staff also keep doing their rounds on normal project floors. Their tools and routes are visual routines.
   const cleaner = new RoutineStaff('June · cleaning lady', [

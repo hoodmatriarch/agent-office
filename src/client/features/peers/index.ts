@@ -87,7 +87,7 @@ export function installPeers(ctx: Ctx, core: CoreState, parts: Pick<Parts, 'puff
     }
     for (const [id, r] of remotes) {
       const peer = store.peers.get(id);
-      if (!peer || !store.onMyFloor(peer) || peer.lite) {
+      if (id === store.you || !peer || !store.onMyFloor(peer) || peer.lite) {
         scene.remove(r.person.root);
         remotes.delete(id);
       }

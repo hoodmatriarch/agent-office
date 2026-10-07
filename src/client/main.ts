@@ -31,6 +31,7 @@ import { installArcade } from './features/arcade';
 import { installBossBreak } from './features/boss-break';
 import { installGuide } from './features/guide';
 import { installFacilities } from './features/facilities';
+import { installStudy } from './features/study';
 import { installBar } from './features/bar';
 import { installBarGames } from './features/bargames';
 import { installBasketball } from './features/basketball';
@@ -185,6 +186,7 @@ installDictation(ctx);
 parts.hud = installHud(ctx, core, parts);
 installGuide(ctx, parts);
 installFacilities(ctx, { walking: parts.walking });
+installStudy(ctx);
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

@@ -11,6 +11,8 @@
 
 **A 3D office your team shares with its coding agents.**
 
+This personal build also has shared **Break floor** and **Classroom & study hall** destinations in the elevator. [Study hall instructions](docs/study-hall.md) cover saved lectures, hand raising, subject reading with highlights and notes, and homework in backpacks or break-floor lockers. Curriculum content and an AI tutor are planned separately. Multiple tabs in one browser share one active avatar.
+
 Sit **Claude Code**, **Codex**, **OpenCode**, **Grok**, **Muse**, **DeepSeek Harness** and **Cursor** workers at desks, watch each one's terminal on the laptop in front of it,
 and jump into any of them together. Every GitHub repo is a floor of the building.
 

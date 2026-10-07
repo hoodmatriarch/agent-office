@@ -1,6 +1,7 @@
 import { h, toast } from '../../ui/dom';
 import { Collection, upload, assetUrl, type Asset } from './data';
 import { action, input, panel, chooseFile } from './panels';
+import { lockerTools } from '../../core/locker-tools';
 interface RecordFile { id: string; name: string; job: string; personal: string; reviews: string; complaints: string; documents: Asset[] }
 export class StorageRoom {
   readonly records = new Collection<RecordFile[]>('records', []);
@@ -32,6 +33,7 @@ export class StorageRoom {
   async coatLocker() {
     await this.locker.load(); const { body } = panel('🧥 Your coat & personal locker');
     const coat = input('Coats and clothing', this.locker.value.coats, true), items = input('Personal items', this.locker.value.items, true);
+    for (const [label, run] of lockerTools) body.append(action(label, run));
     body.append(h('p', {}, 'Keep a saved list of the items in your locker, plus personal files. Each individual office account has its own locker; shared-password sign-ins use the shared locker.'), coat.row, items.row,
       action('Save locker', async () => { this.locker.value.coats = coat.field.value.slice(0, 4000); this.locker.value.items = items.field.value.slice(0, 4000); await this.locker.save(); toast('Locker saved.'); }, true),
       ...this.locker.value.documents.map(asset => h('a.btn', { href: assetUrl(asset, true), download: asset.name }, asset.name)), chooseFile('*', async file => { this.locker.value.documents.push(await upload(file)); await this.locker.save(); body.append(h('p', {}, `${file.name} saved in your locker.`)); }));
