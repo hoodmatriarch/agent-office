@@ -4,6 +4,7 @@
 import { IS_MAC } from './termkeys';
 
 export const HELP_ROWS: readonly (readonly [string, string])[] = [
+  ['🎓', 'Classroom & study hall: take the elevator, choose a desk, read subject material with notes and highlights, raise your hand, and keep homework in your backpack or break-floor locker'],
   ['W A S D', 'Walk (hold Shift to run)'],
   ['Space', 'Jump'],
   ['☕', 'Press E at the coffee machine in the kitchen for a minute of quicker walking and higher jumps. Three cups in a row gives you the jitters'],
@@ -24,6 +25,9 @@ export const HELP_ROWS: readonly (readonly [string, string])[] = [
   ['P', 'Prompt: give a task to a new or existing worker at the desk you face'],
   ['C', 'Changes: what the worker at the desk you face changed — files and diff, commit, discard, open a PR'],
   ['B', 'Open a shared shell (dev servers, git, tests) at an empty desk'],
+  ['F2', 'Ask Pip, the blue office guide: beginner explanations, example prompts, and an optional walking tour. E near Pip talks to him; Ask Pip on screen opens the same guide'],
+  ['🌿', 'The break floor: take the elevator, then explore with the normal office controls. Use the Floor guide to walk to food, kitchen shifts, books, drawing, documents, lockers and storage. No GitHub project is needed.'],
+  ['📺', 'Boss TV: E at the World’s Best Boss plaque loads your original U.S. Office intro. The monitor loops silently; its theme plays from the desk every 15 minutes at 80% in the boss office and 45% in the main work area. Minesweeper stays on the boss’s chair'],
   ['R', 'Resume a sleeping worker'],
   ['X', 'Send a worker home (frees the desk)'],
   ['L', 'Hang a big sign over the desk you face ("Operations", "Code cleanup"), or change or take down the one there'],

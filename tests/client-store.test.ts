@@ -20,6 +20,7 @@ Object.defineProperty(performance, 'now', { configurable: true, writable: true, 
 
 const state = await import('../src/client/state/index.js');
 const { store } = state;
+const { BREAK, builtinFloor } = await import('../src/shared/builtin-floors.js');
 
 const msg = (m: object) => m as ServerMsg;
 const peer = (id: string, extra: object = {}) => ({ id, name: id, color: '#fff', look: {}, x: 0, y: 0, z: 0, rotY: 0, moving: false, floor: 'f1', ...extra });
@@ -201,6 +202,14 @@ test('a listener sees the store as it was when its topic fired', () => {
   store.apply(msg({ t: 'worker.remove', workerId: 'w-9', jail: { prisoners: [{ id: 'w-9' }], bones: 7 } }));
   assert.equal(seen.workers, 7);
   for (const off of offs) off();
+});
+
+test('a shared floor has its own map and seats, and leaving restores the project map', () => {
+  store.apply(msg({ t: 'floor.enter', peers: [peer('p-break', { floor: BREAK })], ...floorView(BREAK), project: null, workers: [] }));
+  assert.equal(store.floor, BREAK); assert.equal(store.plan(), builtinFloor(BREAK)!.plan);
+  assert.ok(store.plan().seatingById.has('break-couch-0')); assert.equal(store.workers.size, 0);
+  store.apply(msg({ t: 'floor.enter', peers: [], ...floorView('f1') }));
+  assert.notEqual(store.plan().id, 'break-floor'); assert.equal(store.floor, 'f1');
 });
 
 test('what the browser remembers keeps its keys and shapes', () => {

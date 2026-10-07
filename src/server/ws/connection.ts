@@ -5,6 +5,7 @@ import type { ClientMsg } from '../../shared/protocol.js';
 import { elevatorSpot } from '../../shared/layout.js';
 import { lookFromSeed, sanitizeLook } from '../../shared/avatar.js';
 import { ROOF } from '../../shared/rooftop.js';
+import { builtinFloor } from '../../shared/builtin-floors.js';
 import type { Ctx } from '../office/context.js';
 import { newClient } from '../office/client.js';
 import { COLOR_RE, spotFrom, str } from '../office/input.js';
@@ -23,14 +24,15 @@ export function onConnection(ctx: Ctx, ws: WebSocket, url: URL, session: Session
   const id = randomBytes(5).toString('hex');
   // Back on the floor they were on before a reload, a restart or closing the tab, else the first floor.
   const wanted = url.searchParams.get('floor');
+  const shared = builtinFloor(wanted);
   // Their floor's gone since (taken off the building, or its checkout deleted): up to the roof instead.
-  const gone = !!wanted && wanted !== ROOF && !floors.has(wanted);
+  const gone = !!wanted && !shared && wanted !== ROOF && !floors.has(wanted);
   // Up on the roof, as long as there's a building under it.
   const onRoof = (wanted === ROOF || gone) && floors.size > 0;
-  const floor = onRoof ? undefined : arrivalFloor(wanted);
+  const floor = onRoof || shared ? undefined : arrivalFloor(wanted);
   // Back where they were standing on it too; anywhere else, they arrive by elevator.
-  const back = !gone && wanted !== null && (onRoof || floor?.id === wanted);
-  const spot = (back && spotFrom(url.searchParams)) || { ...elevatorSpot(), y: 0, rotY: 0 };
+  const back = !gone && wanted !== null && (onRoof || !!shared || floor?.id === wanted);
+  const spot = (back && spotFrom(url.searchParams)) || shared?.plan.spawn || { ...elevatorSpot(), y: 0, rotY: 0 };
   const account = session.account;
   // An account's name is its own; on the shared password people pick one.
   const name = account?.name ?? (str(url.searchParams.get('name'), 24).trim() || `Guest ${id.slice(0, 3)}`);
@@ -53,7 +55,7 @@ export function onConnection(ctx: Ctx, ws: WebSocket, url: URL, session: Session
     sharing: false,
     ...(account ? { account: true } : {}),
     ...(url.searchParams.get('lite') === '1' ? { lite: true } : {}),
-    ...(onRoof ? { floor: ROOF } : floor ? { floor: floor.id } : {}),
+    ...(shared ? { floor: shared.id } : onRoof ? { floor: ROOF } : floor ? { floor: floor.id } : {}),
   });
   // Maps of your own may have been added or edited since: everyone already in hears first.
   const mapWas = maps.pick();
@@ -84,6 +86,7 @@ export function onConnection(ctx: Ctx, ws: WebSocket, url: URL, session: Session
     prompts: prompts.state(),
     leaveOnMerge: leaveOnMerge.state(),
     ...(onRoof ? roofView(ctx) : floorView(ctx, floor)),
+    ...(shared ? { floor: shared.id } : {}),
   });
   screensOf(ctx, client, floor);
   broadcast({ t: 'peer.join', peer: client.peer }, id);
