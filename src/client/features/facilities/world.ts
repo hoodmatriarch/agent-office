@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { BREAK_TABLES, BREAK_SOFAS } from '../../../shared/break-layout';
 import { NavGrid, type Rect } from '../../../shared/nav';
 import { mesh, roundedBox, textSprite, toon } from '../../world/toon';
 import { Person } from '../../world/character';
@@ -45,8 +46,8 @@ export class BreakWorld {
     this.artCanvas.width = 1200; this.artCanvas.height = 750;
     const g = this.artCanvas.getContext('2d')!; g.fillStyle = '#fffaf0'; g.fillRect(0, 0, 1200, 750); g.fillStyle = '#476657'; g.font = '50px sans-serif'; g.fillText('Your ideas belong here.', 220, 375);
     this.artTexture = new THREE.CanvasTexture(this.artCanvas); this.artTexture.colorSpace = THREE.SRGBColorSpace;
-    const art = mesh(new THREE.PlaneGeometry(3.2, 2), new THREE.MeshBasicMaterial({ map: this.artTexture }), 12, 2, 13.4, false); art.rotation.y = Math.PI; this.scene.add(art);
-    this.spot('studio', '🎨 Drawing desk · art stays here', 12, 11.3, [12, 9.5], art);
+    const art = mesh(new THREE.PlaneGeometry(3.2, 2), new THREE.MeshBasicMaterial({ map: this.artTexture }), -13.6, 2, 13.5, false); art.rotation.y = Math.PI; this.scene.add(art);
+    this.spot('studio', '🎨 Drawing desk · art stays here', -13.6, 12, [-13.6, 11.5], art);
   }
   box(x: number, y: number, z: number, w: number, h: number, d: number, color: string, solid = false) {
     const object = mesh(roundedBox(w, h, d, Math.min(.06, w / 5, h / 5, d / 5)), toon(color), x, y, z); this.scene.add(object);
@@ -80,21 +81,21 @@ export class BreakWorld {
     this.spot('service', '☕ Mae · cashier & barista', -5, -7.6, [-5, -4.6], this.barista.root);
     this.spot('volunteer', '👨‍🍳 Gus · chef & kitchen shifts', -12, -10.8, [-8, -4.6], this.chef.root);
     this.spot('volunteer', '🍳 Volunteer kitchen shifts', -14.5, -5.3, [-14.5, -3.5], this.box(-14.5, 1.4, -5.3, .7, 1.2, .3, '#dd9a6b'));
-    const vending = this.box(3, 1.05, -12.9, 1.4, 2.1, 1, '#497891', true);
-    this.box(3, 1.3, -12.36, .95, 1.1, .04, '#dbe8e9');
-    for (let i = 0; i < 9; i++) this.box(2.7 + i % 3 * .3, .9 + Math.floor(i / 3) * .3, -12.3, .16, .2, .12, ['#e2b95c', '#cb765c', '#7fa880'][i % 3]);
-    this.box(3.53, 1.2, -12.35, .12, .35, .04, '#182e35'); this.box(3, .35, -12.35, .8, .2, .08, '#182e35');
-    this.spot('vending', '🥤 Vending machine', 3, -12.4, [3, -10.8], vending);
+    const vending = this.box(6.5, 1.05, -12.5, 1.4, 2.1, 1, '#497891', true);
+    this.box(6.5, 1.3, -11.96, .95, 1.1, .04, '#dbe8e9');
+    for (let i = 0; i < 9; i++) this.box(6.2 + i % 3 * .3, .9 + Math.floor(i / 3) * .3, -11.9, .16, .2, .12, ['#e2b95c', '#cb765c', '#7fa880'][i % 3]);
+    this.box(7.03, 1.2, -11.95, .12, .35, .04, '#182e35'); this.box(6.5, .35, -11.95, .8, .2, .08, '#182e35');
+    this.spot('vending', '🥤 Vending machine', 6.5, -12, [6.5, -10.4], vending);
   }
   private lounge() {
     this.box(11, .03, -4, 12, .035, 12, '#b9ccc3');
-    for (const [x, z] of [[8, -5], [14, .6]]) {
-      const sofa = this.box(x, .45, z, 3.8, .9, 1.1, '#688778', true); this.box(x, .95, z - .48, 3.8, .8, .28, '#688778');
+    for (const { x, z, direction } of BREAK_SOFAS) {
+      const sofa = this.box(x, .45, z, 3.8, .9, 1.1, '#688778', true); this.box(x, .95, z - direction * .48, 3.8, .8, .28, '#688778');
       for (const side of [-1, 1]) this.box(x + side * 1.75, .85, z, .3, .8, 1.2, '#59776b');
-      for (let i = 0; i < 3; i++) this.box(x - 1 + i, .92, z + .04, .85, .15, .9, '#86a493');
-      this.spot('couch', '🛋️ Sit & read your book', x, z, [x, z + 1.5], sofa);
+      for (let i = 0; i < 3; i++) this.box(x - 1 + i, .92, z + direction * .04, .85, .15, .9, '#86a493');
+      this.spot('couch', '🛋️ Sit & read your book', x, z, [x, z + direction * 1.5], sofa);
     }
-    this.box(10, .45, -1, 3.5, .1, 1.8, '#bd8e65', true); for (const x of [8.7, 11.3]) this.box(x, .22, -1, .1, .45, 1.2, '#765847');
+    this.box(11, .45, -3, 3.5, .1, 1.8, '#bd8e65', true); for (const x of [9.7, 12.3]) this.box(x, .22, -3, .1, .45, 1.2, '#765847');
     this.box(13, 1.4, -12.5, 8, 2.8, .5, '#9c7955', true);
     for (let row = 0; row < 4; row++) { this.box(13, .32 + row * .62, -12.1, 8, .07, .85, '#bc9973'); for (let i = 0; i < 22; i++) this.box(9.5 + i * .32, .62 + row * .62, -12.1, .22, .5 + i % 3 * .025, .4, ['#527969', '#d19b79', '#dfbf75', '#728cad', '#a47372'][i % 5]); }
     this.spot('library', '📚 Upload & choose a real book', 13, -11.8, [13, -10.3], this.box(13, 1, -11.8, 1.8, .1, .6, '#dabe97'));
@@ -108,36 +109,36 @@ export class BreakWorld {
     this.spot(id, title, x, z - depth / 2 - .2, [x, z - depth / 2 - 1.7], door);
   }
   private rooms() {
-    for (const [x, id, title] of [[-14.5, 'men', '🚹 Men’s bathroom'], [-8, 'women', '🚺 Women’s bathroom']] as const) {
-      this.partition(x, 10.6, 6, 6.3, title, id);
-      this.box(x, .015, 10.5, 5.8, .03, 6, '#cfdbd3');
+    for (const [x, id, title] of [[8.1, 'men', '🚹 Men’s bathroom'], [14.6, 'women', '🚺 Women’s bathroom']] as const) {
+      this.partition(x, 10.75, 6, 5.9, title, id);
+      this.box(x, .015, 10.75, 5.8, .03, 5.7, '#cfdbd3');
       for (const side of [-1, 1]) {
         const tx = x + side * 1.6; this.box(tx, .5, 12.5, .75, 1, .3, '#f5f3e9'); this.scene.add(mesh(new THREE.CylinderGeometry(.3, .24, .42, 20), toon('#f5f3e9'), tx, .35, 12));
         this.box(tx, .6, 12, .75, .09, .85, '#e6e4db'); this.box(tx, .8, 9.5, 1, .12, .65, '#f6f4e8'); this.box(tx, 1.6, 9.83, .9, 1.1, .03, '#b6cdd0'); this.box(tx + .4, 1, 9.5, .14, .2, .12, '#9db8a8');
       }
       this.box(x, 1.4, 13.5, .15, 2.8, 2.6, '#d2d6cb');
     }
-    this.partition(-14.2, 2.6, 6.4, 6.2, '🗄️ Store room', 'records');
-    for (let i = 0; i < 3; i++) { this.box(-16.4, .85, .5 + i * 1.5, 1.1, 1.7, 1.1, '#798a80', true); this.box(-16.4, .9, .5 + i * 1.5, .8, .08, 1.14, '#d8d9c4'); }
-    const rack = this.box(-11.8, 1.25, 3.5, .5, 2.5, 3, '#a99070', true); for (let i = 0; i < 9; i++) this.box(-11.75, .4 + Math.floor(i / 3) * .7, 2.6 + i % 3 * .8, .7, .45, .6, ['#e7d5b8', '#dedfd1', '#eae8df'][i % 3]);
-    this.spot('supplies', '📦 Supplies inventory', -11.8, 3, [-13, 3], rack);
-    const lockers = this.box(-17.2, 1.15, -3.2, .9, 2.3, 4.2, '#6d8c87', true);
-    for (let i = 0; i < 5; i++) { this.box(-16.72, 1.15, -4.8 + i * .8, .03, 2.1, .7, '#8aa59d'); this.box(-16.66, 1.2, -4.6 + i * .8, .08, .2, .06, '#e7d6a7'); }
-    this.spot('locker', '🧥 Coat & personal lockers', -16.8, -3, [-15.2, -3], lockers);
+    this.partition(-13.6, 10.9, 8, 5.6, '🗄️ Store room', 'records');
+    for (let i = 0; i < 3; i++) { this.box(-16.4, .85, 9 + i * 1.5, 1.1, 1.7, 1.1, '#798a80', true); this.box(-16.4, .9, 9 + i * 1.5, .8, .08, 1.14, '#d8d9c4'); }
+    const rack = this.box(-10.5, 1.25, 11.7, .5, 2.5, 3, '#a99070', true); for (let i = 0; i < 9; i++) this.box(-10.45, .4 + Math.floor(i / 3) * .7, 10.8 + i % 3 * .8, .7, .45, .6, ['#e7d5b8', '#dedfd1', '#eae8df'][i % 3]);
+    this.spot('supplies', '📦 Supplies inventory', -10.5, 11.5, [-11.8, 11.5], rack);
+    const lockers = this.box(-8.7, 1.15, 10.4, 1.2, 2.3, 3.6, '#6d8c87', true);
+    for (let i = 0; i < 5; i++) { this.box(-8.07, 1.15, 9 + i * .65, .03, 2.1, .7, '#8aa59d'); this.box(-8, 1.2, 9.2 + i * .65, .08, .2, .06, '#e7d6a7'); }
+    this.spot('locker', '🧥 Coat & personal lockers', -8, 10.4, [-6.7, 10.4], lockers);
   }
   private dining() {
-    for (const [x, z] of [[-5, 3], [1.5, 3], [1.5, 8], [7, 6]]) {
+    for (const { x, z } of BREAK_TABLES) {
       const table = this.box(x, .8, z, 2.6, .15, 1.7, '#b7865f', true); this.box(x, .4, z, .35, .8, .35, '#57665a');
       for (const side of [-1, 1]) for (const xx of [-.75, .75]) { this.box(x + xx, .43, z + side * 1.35, .7, .14, .65, '#d2a26e'); this.box(x + xx, .78, z + side * 1.6, .7, .7, .12, '#d2a26e'); }
       this.spot('couch', '🍽️ Sit, eat & take a break', x, z, [x, z - 1.8], table);
     }
-    this.plant(5, 11.7);
+    this.box(-5.2, 1.15, 13, 5.7, 2.3, .85, '#6d8c87', true);
+    for (let i = 0; i < 7; i++) this.box(-7.6 + i * .8, 1.15, 12.55, .7, 2.1, .03, '#8aa59d');
   }
   private creative() {
-    const board = this.box(16.4, 1.65, 10.5, .25, 2.5, 3.5, '#c2a16e', true);
-    for (let i = 0; i < 6; i++) this.box(16.23, 1 + Math.floor(i / 3) * .8, 9.5 + i % 3 * .8, .03, .6, .65, ['#ddb6a0', '#a4c7b4', '#efd394'][i % 3]);
-    this.spot('organizer', '🗂️ Documents & mood boards', 16, 10.5, [14.6, 10.5], board);
-    this.box(12, .8, 11.6, 3.7, .15, 1.4, '#b7865f', true); this.box(12, .4, 11.6, .3, .8, .4, '#57665a');
+    const board = this.box(-17.45, 1.65, 10.8, .15, 2.5, 2.5, '#c2a16e');
+    for (let i = 0; i < 6; i++) this.box(-17.34, 1 + Math.floor(i / 3) * .8, 10 + i % 3 * .8, .03, .6, .65, ['#ddb6a0', '#a4c7b4', '#efd394'][i % 3]);
+    this.spot('organizer', '🗂️ Documents & mood boards', -17.3, 10.8, [-15, 10.8], board);
   }
   update(t: number, x: number, z: number) {
     this.barista.pose = 'type'; this.chef.pose = 'type'; this.barista.update(.016, t, false, false); this.chef.update(.016, t, false, false);

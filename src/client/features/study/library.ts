@@ -8,7 +8,7 @@ import { readVideo } from '../studios/video';
 interface Material {id:string;title:string;section:string;kind:string;asset:Asset;page:number;notes:Record<string,string>;highlights:{page:number;quote:string}[];}
 export class StudyLibrary {
   readonly data=new Collection<Material[]>('study-library',[]);
-  constructor(private sit:()=>void){}
+  constructor(private sit:()=>void,private screen?:(asset:Asset)=>void){}
   async open(){
     await this.data.load();const p=panel('📚 Subject library',true),section=input('Subject / curriculum section','General'),kind=h('select',{'aria-label':'Material type'}),search=input('Search subject, title or type'),list=h('div.fac-grid');
     for(const name of ['Book / textbook','Article','Research paper','Reference / notes','Learning video'])kind.append(h('option',{},name));
@@ -24,7 +24,7 @@ export class StudyLibrary {
   }
   async read(book:Material){
     const p=panel('📖 Study · '+book.title,true);p.root.classList.add('study-reader');
-    if(book.asset.type==='video/mp4'){readVideo(p.body,p.modal,book.asset);return;}
+    if(book.asset.type==='video/mp4'){readVideo(p.body,p.modal,book.asset,this.screen);return;}
     const page=h('div.study-page'),text=h('div.book-text.study-transcript',{'aria-label':'Selectable reading text'}),notes=input('Notes for this page',book.notes[String(book.page)]??'',true),count=h('span',{},'Loading…'),quotes=h('div');
     let pdf:PDFDocumentProxy|null=null,pages:string[]=[],closed=false,busy=false;
     const save=async()=>{book.notes[String(book.page)]=notes.field.value.slice(0,16000);await this.data.save();};

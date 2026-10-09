@@ -31,9 +31,9 @@ export class RoutineStaff {
   dispose() { this.person.root.traverse(object => { if (object instanceof THREE.Mesh) { object.geometry.dispose(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.forEach(material => material.dispose()); } if (object instanceof THREE.Sprite) { object.material.map?.dispose(); object.material.dispose(); } }); this.person.root.removeFromParent(); }
 }
 export const CLEANING: Job[] = [
-  { name: 'Wiping dining tables', at: [1, 1] }, { name: 'Washing dishes', at: [-7, -4.5] }, { name: 'Emptying the bins', at: [-4, 5] },
-  { name: 'Mopping the floor', at: [3, -1] }, { name: 'Cleaning and restocking the men’s bathroom', at: [-14.5, 9] }, { name: 'Cleaning and restocking the women’s bathroom', at: [-8, 9] },
+  { name: 'Wiping dining tables', at: [-8.6, .4] }, { name: 'Washing dishes', at: [-7, -4.5] }, { name: 'Emptying the bins', at: [-4, 5.7] },
+  { name: 'Mopping the floor', at: [3, -1] }, { name: 'Cleaning and restocking the men’s bathroom', at: [8.1, 9] }, { name: 'Cleaning and restocking the women’s bathroom', at: [14.6, 9] },
 ];
 export const MAINTENANCE: Job[] = [
-  { name: 'Restocking the vending machine', at: [-3, .4] }, { name: 'Checking the lights', at: [0, -7] }, { name: 'Repairing a chair', at: [4, 6] }, { name: 'Checking the supply shelves', at: [-13, 3] },
+  { name: 'Restocking the vending machine', at: [6.5, -10.4] }, { name: 'Checking the lights', at: [0, -7] }, { name: 'Repairing a chair', at: [-2, 5.6] }, { name: 'Checking the supply shelves', at: [-11.8, 11.5] },
 ];

@@ -10,7 +10,7 @@ test('study floor has distinct shared seating, independent of the break floor',(
   assert.equal(builtinFloor(STUDY)?.plan,STUDY_PLAN);
   assert.ok(seatHereOn(STUDY_PLAN,'study-desk-0-0:0',false));
   assert.equal(seatHereOn(builtinFloor(BREAK)!.plan,'study-desk-0-0:0',false),undefined);
-  assert.equal(STUDY_PLAN.seating.length,11);
+  assert.equal(STUDY_PLAN.seating.length,13);
 });
 test('homework keeps work and locker location when assigned again, and creates a new attempt after submission',()=>{
   const data=new StudyData();const first=data.assign(lesson);first.work='My answer';first.location='locker';

@@ -44,7 +44,7 @@ export class BreakRoom {
     const seat = places[0]; if (!seat) return toast('Every seat is occupied.');
     player.sit(seat); this.ctx.me.sit(seat.hips); this.ctx.net.send({t:'sit',seat:seat.key});
   }
-  takeBook(title: string, read: () => void) { this.carried = `📖 ${title}`; this.walking.walkThen({ x: 8, z: -3.4 }, 'the window lounge', () => { this.sit(); read(); }, {x:18,z:-5}); }
+  takeBook(title: string, read: () => void) { this.carried = `📖 ${title}`; this.walking.walkThen({ x: 11, z: -4.5 }, 'the window lounge', () => { this.sit(); read(); }, {x:11,z:-6}); }
   places() {
     if (store.floor !== BREAK || !this.world) return;
     const p = panel('🌿 Around the break floor');

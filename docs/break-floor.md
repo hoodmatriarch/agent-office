@@ -2,7 +2,7 @@
 
 The café counter is now 0.96 m high. Visible **E · Use** controls in front of stations make the drawing desk, mood board, counter, staff and kitchen shifts accessible without aiming through furniture. Mae's panel also links directly to the kitchen game. The vending machine is against the north wall, away from the main walkway; its separate menu has coded bottled/canned drinks and packaged snacks, stock counts, a collection tray and simulated restocking by Leon. Prices are pretend credits.
 
-Use [the numbered top-down layout](break-floor-layout.svg) to propose a better furniture arrangement. The diagram represents the current floor after these fixes, with north at the top and the elevator at the bottom. Furniture placement can be revised from your marked-up image.
+The revised layout follows the owner's marked-up plan: café northwest, six dining tables with 24 usable chairs, library and two inward-facing sofas beside the east windows, storeroom southwest, two coat-locker banks beside it, and men's and women's bathrooms southeast. The elevator remains at the south center. Drawing and document/mood-board tools are in the storeroom, with saved content preserved. [The top-down layout](break-floor-layout.svg) shows the new arrangement. Staff routes, station controls, collision boundaries and shared seats follow the furniture.
 
 Homework stored by the classroom appears through **Homework stored in this locker** at the coat locker. See [Classroom & study hall](study-hall.md). Multiple tabs in the same browser transfer control to one active avatar, preventing an idle copy at the elevator.
 
