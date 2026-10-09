@@ -1,4 +1,5 @@
 import { LEARNING } from './learning';
+import { STUDIO_LESSONS } from '../studios/guide';
 export interface Lesson {
   id: string;
   icon: string;
@@ -23,6 +24,7 @@ export const LESSONS: Lesson[] = [
     term: 'A prompt is simply the instruction you give a worker.', at: [-4.5, 0],
   },
   ...LEARNING,
+  ...STUDIO_LESSONS,
   {
     id: 'projects', icon: '🏢', title: 'Floors and repositories', words: 'floor project repository repo github folder elevator files',
     what: 'Each floor is one project. A repository, often shortened to “repo,” is that project’s files plus a record of changes.',

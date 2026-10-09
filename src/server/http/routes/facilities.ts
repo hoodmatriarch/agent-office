@@ -1,6 +1,7 @@
 import { BUCKETS, Facilities, MAX_ASSET, type Bucket } from '../../facilities.js';
 import { readBytes, readBody, sameOrigin, send } from '../util.js';
 import type { Route } from '../router.js';
+import { serveMedia } from '../../studios/media.js';
 
 export const facilitiesRoute: Route = {
   prefix: '/api/facilities/', auth: 'session',
@@ -27,9 +28,7 @@ export const facilitiesRoute: Route = {
         const file = vault.file(url.searchParams.get('id') ?? '');
         if (!file) return send(res, 404, { error: 'File not found' });
         const { asset, body } = file;
-        const inline = url.searchParams.get('download') !== '1' && (asset.type.startsWith('image/') || asset.type === 'application/pdf' || asset.type === 'text/plain');
-        res.writeHead(200, { 'content-type': asset.type, 'content-length': body.length, 'cache-control': 'private, no-cache', 'x-content-type-options': 'nosniff', 'cross-origin-resource-policy': 'same-origin', 'content-security-policy': "default-src 'none'; sandbox", 'content-disposition': `${inline ? 'inline' : 'attachment'}; filename*=UTF-8''${encodeURIComponent(asset.name)}` });
-        return res.end(body);
+        return serveMedia(res,asset,body,req.headers.range,url.searchParams.get('download')==='1');
       }
       return send(res, 404, { error: 'Not found' });
     } catch (error) {

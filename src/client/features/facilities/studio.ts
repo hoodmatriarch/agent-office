@@ -1,5 +1,5 @@
 import { h, toast } from '../../ui/dom';
-import { Collection, upload, assetUrl, type Asset } from './data';
+import { Collection, upload, assetUrl, type Asset, type Bucket } from './data';
 import { action, chooseFile, input, panel, closeCleanup } from './panels';
 type Tool = 'brush' | 'eraser' | 'line' | 'rectangle' | 'ellipse' | 'text';
 interface Stroke { tool: Tool; color: string; width: number; points: [number, number][]; text?: string }
@@ -7,13 +7,13 @@ interface Art { title: string; background: string; strokes: Stroke[]; gallery: A
 
 export class Studio {
   readonly canvas = document.createElement('canvas');
-  readonly data = new Collection<Art>('studio', { title: 'My sketch desk', background: '#fffaf0', strokes: [], gallery: [] });
+  readonly data: Collection<Art>;
   private timer = 0;
   private saving = false;
   private dirty = false;
   private status: HTMLElement | null = null;
   private redo: Stroke[] = [];
-  constructor(private readonly changed: () => void) { this.canvas.width = 1200; this.canvas.height = 750; }
+  constructor(private readonly changed: () => void, bucket:Bucket='studio') { this.data=new Collection<Art>(bucket,{title:'My sketch desk',background:'#fffaf0',strokes:[],gallery:[]});this.canvas.width = 1200; this.canvas.height = 750; }
   async load() { await this.data.load(); this.render(); }
   render(extra?: Stroke) {
     const g = this.canvas.getContext('2d')!;

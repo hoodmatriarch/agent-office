@@ -1,8 +1,9 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import path from 'node:path';
+import { STUDIO_BUCKETS,STUDIO_TYPES } from '../shared/studio-files.js';
 
-export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library'] as const;
+export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library',...STUDIO_BUCKETS] as const;
 export type Bucket = typeof BUCKETS[number];
 export const MAX_ASSET = 80 * 1024 * 1024;
 export interface Asset { id: string; name: string; type: string; size: number }
@@ -32,7 +33,7 @@ export class Facilities {
     if (!body.length || body.length > MAX_ASSET) throw new Error('Choose a non-empty file under 80 MB.');
     const safeName = path.basename(name.replace(/\\/g, '/')).replace(/[\x00-\x1f]/g, '').slice(0, 180) || 'file';
     const extension = safeName.split('.').pop()!.toLowerCase();
-    const type = TYPES[extension] ?? 'application/octet-stream';
+    const type = TYPES[extension] ?? STUDIO_TYPES[extension] ?? 'application/octet-stream';
     if (type === 'application/pdf' && body.subarray(0, 5).toString() !== '%PDF-') throw new Error('This file is not a PDF.');
     if (type === 'image/png' && body.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') throw new Error('This file is not a PNG.');
     const asset = { id: randomUUID(), name: safeName, type, size: body.length };

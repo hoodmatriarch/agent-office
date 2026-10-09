@@ -32,6 +32,7 @@ import { installBossBreak } from './features/boss-break';
 import { installGuide } from './features/guide';
 import { installFacilities } from './features/facilities';
 import { installStudy } from './features/study';
+import { installStudios } from './features/studios';
 import { installBar } from './features/bar';
 import { installBarGames } from './features/bargames';
 import { installBasketball } from './features/basketball';
@@ -187,6 +188,7 @@ parts.hud = installHud(ctx, core, parts);
 installGuide(ctx, parts);
 installFacilities(ctx, { walking: parts.walking });
 installStudy(ctx);
+installStudios(ctx);
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

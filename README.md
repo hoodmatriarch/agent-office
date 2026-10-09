@@ -5,6 +5,8 @@
 
 <div align="center">
 
+**Creative studio & craft workshop:** two new elevator floors with playable piano/sample recording, sketches, writing, mood boards, measured Blender prototypes and MP4 station libraries. See the [studio guide](docs/studios.md) for controls, real-file exports and optional ChatGPT/Claude connections.
+
 *"Whatever you do, work heartily, as for the Lord and not for men."* — Colossians 3:23 (ESV)
 
 # 🏢 Agent Office

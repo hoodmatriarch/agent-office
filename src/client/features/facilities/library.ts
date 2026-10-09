@@ -4,6 +4,8 @@ import { unzipSync, strFromU8 } from 'fflate';
 import { h, toast } from '../../ui/dom';
 import { Collection, assetUrl, upload, type Asset } from './data';
 import { action, chooseFile, panel, closeCleanup } from './panels';
+import type { Bucket } from './data';
+import { readVideo } from '../studios/video';
 interface Book { id: string; asset: Asset; title: string; page: number }
 
 export function textPages(text: string) {
@@ -34,15 +36,16 @@ export function epubText(bytes: Uint8Array): string {
 }
 
 export class Library {
-  readonly data = new Collection<Book[]>('library', []);
+  readonly data:Collection<Book[]>;
+  constructor(bucket:Bucket='library',private title='📚 Reading library',private screen?:(asset:Asset)=>void){this.data=new Collection<Book[]>(bucket,[]);}
   selected: Book | null = null;
   async open(take: (book: Book) => void) {
     await this.data.load();
-    const { body, modal } = panel('📚 Reading library', true);
+    const { body, modal } = panel(this.title, true);
     const list = h('div.fac-grid');
     const render = () => { list.replaceChildren(...this.data.value.map(book => h('article.fac-card', {}, h('div.book-cover', {}, '📖', h('strong', {}, book.title)), h('p', {}, `Bookmark: page ${book.page + 1}`), action('Take book to couch', () => { this.selected = book; modal.close(); take(book); }), h('a.btn', { href: assetUrl(book.asset, true), download: book.asset.name }, 'Download original')))); if (!this.data.value.length) list.append(h('p.fac-note', {}, 'Your shelves are ready. Upload a PDF, EPUB, TXT, or Markdown book.')); };
-    const file = chooseFile('.pdf,.epub,.txt,.md', async file => {
-      if (!/\.(pdf|epub|txt|md)$/i.test(file.name)) throw new Error('Choose PDF, EPUB, TXT, or Markdown.');
+    const file = chooseFile('.pdf,.epub,.txt,.md,.mp4', async file => {
+      if (!/\.(pdf|epub|txt|md|mp4)$/i.test(file.name)) throw new Error('Choose PDF, EPUB, TXT, Markdown or MP4.');
       const asset = await upload(file); this.data.value.push({ id: crypto.randomUUID(), asset, title: file.name.replace(/\.[^.]+$/, ''), page: 0 }); await this.data.save(); render();
     });
     body.append(h('p', {}, 'Upload your books. Pick one up, take a seat by the window, and click the page edges to turn pages. PDF preserves the original pages; EPUB and text are arranged into readable pages.'), file, list); render();
@@ -50,6 +53,7 @@ export class Library {
   async read() {
     if (!this.selected) { toast('Pick a book from the library first.'); return; }
     const book = this.selected, { body, root, modal } = panel(`📖 ${book.title}`, true);
+    if(book.asset.type==='video/mp4'){readVideo(body,modal,book.asset,this.screen);return;}
     root.classList.add('reader');
     const page = h('div.book-page', { 'aria-label': 'Book page' }), count = h('span', {}, 'Loading your book…');
     const previous = action('← Previous page', () => turn(-1)), next = action('Next page →', () => turn(1));

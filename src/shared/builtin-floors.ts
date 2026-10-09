@@ -1,6 +1,7 @@
 import { OFFICE_PLAN, type MapPlan } from './maps/index.js';
 import type { SeatDef } from './layout.js';
 import { STUDY, STUDY_FLOOR } from './study-plan.js';
+import { CREATIVE, CRAFT, CREATIVE_FLOOR, CRAFT_FLOOR } from './studio-plans.js';
 
 export const BREAK = '@break';
 const seating: SeatDef[] = [
@@ -11,3 +12,5 @@ const plan: MapPlan = { ...OFFICE_PLAN, id: 'break-floor', name: 'Break floor', 
 /** Shared facilities are real destinations, independent of the building's project checkouts and map. */
 export const BUILTIN_FLOORS = new Map([[BREAK, { id: BREAK, name: 'Break floor', icon: '🌿', description: plan.description, plan }], [STUDY, STUDY_FLOOR]]);
 export const builtinFloor = (id: string | null | undefined) => id ? BUILTIN_FLOORS.get(id) : undefined;
+BUILTIN_FLOORS.set(CREATIVE,CREATIVE_FLOOR);
+BUILTIN_FLOORS.set(CRAFT,CRAFT_FLOOR);

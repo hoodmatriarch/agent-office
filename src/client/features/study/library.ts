@@ -4,25 +4,27 @@ import { h,toast } from '../../ui/dom';
 import { Collection,upload,assetUrl,type Asset } from '../facilities/data';
 import { action,panel,input,chooseFile,closeCleanup } from '../facilities/panels';
 import { textPages,epubText } from '../facilities/library';
+import { readVideo } from '../studios/video';
 interface Material {id:string;title:string;section:string;kind:string;asset:Asset;page:number;notes:Record<string,string>;highlights:{page:number;quote:string}[];}
 export class StudyLibrary {
   readonly data=new Collection<Material[]>('study-library',[]);
   constructor(private sit:()=>void){}
   async open(){
     await this.data.load();const p=panel('📚 Subject library',true),section=input('Subject / curriculum section','General'),kind=h('select',{'aria-label':'Material type'}),search=input('Search subject, title or type'),list=h('div.fac-grid');
-    for(const name of ['Book / textbook','Article','Research paper','Reference / notes'])kind.append(h('option',{},name));
+    for(const name of ['Book / textbook','Article','Research paper','Reference / notes','Learning video'])kind.append(h('option',{},name));
     const render=()=>{list.replaceChildren();const q=search.field.value.toLowerCase(),materials=this.data.value.filter(m=>`${m.section} ${m.title} ${m.kind}`.toLowerCase().includes(q));
       for(const group of [...new Set(materials.map(m=>m.section))].sort()){
         list.append(h('h3',{},group));for(const material of materials.filter(m=>m.section===group))list.append(h('article.fac-card',{},h('h3',{},material.title),h('small',{},`${material.kind} · page ${material.page+1}`),action('Sit & read with notes',()=>{p.modal.close();this.sit();return this.read(material);}),h('a.btn',{href:assetUrl(material.asset,true),download:material.asset.name},'Download original')));
       }if(!materials.length)list.append(h('p',{},'Upload curriculum reading material to build your subject sections. This library is separate from the break-floor shelves.'));
     };search.field.oninput=render;
-    p.body.append(h('p',{},'Organize books, articles and papers by subject. Reading, highlighting and notes stay together in this library.'),search.row,list,h('h3',{},'Add reading material'),section.row,h('label',{},'Material type',kind),chooseFile('.pdf,.epub,.txt,.md',async file=>{
-      if(!/\.(pdf|epub|txt|md)$/i.test(file.name))throw new Error('Choose PDF, EPUB, text or Markdown.');
+    p.body.append(h('p',{},'Organize books, articles, papers and MP4 learning videos by subject. Reading, highlighting and notes stay together in this library.'),search.row,list,h('h3',{},'Add reading material'),section.row,h('label',{},'Material type',kind),chooseFile('.pdf,.epub,.txt,.md,.mp4',async file=>{
+      if(!/\.(pdf|epub|txt|md|mp4)$/i.test(file.name))throw new Error('Choose PDF, EPUB, text, Markdown or MP4.');
       const asset=await upload(file);this.data.value.push({id:crypto.randomUUID(),title:file.name.replace(/\.[^.]+$/,''),section:section.field.value.trim().slice(0,200)||'General',kind:kind.value,asset,page:0,notes:{},highlights:[]});await this.data.save();render();
     }));render();
   }
   async read(book:Material){
     const p=panel('📖 Study · '+book.title,true);p.root.classList.add('study-reader');
+    if(book.asset.type==='video/mp4'){readVideo(p.body,p.modal,book.asset);return;}
     const page=h('div.study-page'),text=h('div.book-text.study-transcript',{'aria-label':'Selectable reading text'}),notes=input('Notes for this page',book.notes[String(book.page)]??'',true),count=h('span',{},'Loading…'),quotes=h('div');
     let pdf:PDFDocumentProxy|null=null,pages:string[]=[],closed=false,busy=false;
     const save=async()=>{book.notes[String(book.page)]=notes.field.value.slice(0,16000);await this.data.save();};
