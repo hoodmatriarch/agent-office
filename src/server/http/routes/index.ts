@@ -7,6 +7,7 @@ import { authRoutes } from './auth.js';
 import { fileRoutes } from './files.js';
 import { facilitiesRoute } from './facilities.js';
 import { studiosRoute } from './studios.js';
+import { dictionaryRoute } from './dictionary.js';
 import { githubRoutes } from './github.js';
 import { pageRoutes } from './pages.js';
 import { searchRoutes } from './search.js';
@@ -31,6 +32,7 @@ export const routes: readonly Route[] = [
   authRoutes.whoami,
   facilitiesRoute,
   studiosRoute,
+  dictionaryRoute,
   agentRoutes.models,
   fileRoutes.image,
   fileRoutes.whiteboardFile,

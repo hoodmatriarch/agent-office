@@ -58,7 +58,7 @@ export class Library {
     const page = h('div.book-page', { 'aria-label': 'Book page' }), count = h('span', {}, 'Loading your book…');
     const previous = action('← Previous page', () => turn(-1)), next = action('Next page →', () => turn(1));
     const go = h('input', { type: 'number', min: 1, value: book.page + 1, 'aria-label': 'Go to page' });
-    body.append(h('p.fac-note', {}, 'You are seated in the window lounge. Your bookmark saves when you close the book.'), h('div.fac-toolbar', {}, previous, count, next, go, action('Go', () => { book.page = Number(go.value) - 1; return render(); })), page);
+    body.append(h('p.fac-note', {}, 'Your bookmark saves when you close the book.'), h('div.fac-toolbar', {}, previous, count, next, go, action('Go', () => { book.page = Number(go.value) - 1; return render(); })), page);
     let pdf: PDFDocumentProxy | null = null, pages: string[] = [], busy = false, closed = false;
     const total = () => pdf?.numPages ?? pages.length;
     async function render() {

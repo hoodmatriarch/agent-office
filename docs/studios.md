@@ -16,7 +16,9 @@ Editable sketch strokes save and stay on the station screen. Save finished PNGs 
 
 Generate/augment images with the optional OpenAI API connection, or open ChatGPT and upload its result. **Open in Paint** makes a desktop handoff copy. Save to that same file, then **Import saved Paint edits** adds a new version to your shelf.
 
-The stained-paper typewriter saves writing, exports TXT and copies drafts into the digital journal. Journal entries hold text, images, collages and file attachments. Writing-library links include dictionaries and the author’s *The Artist’s Way* site; upload your own books. Copyrighted books are not bundled.
+The typewriter uses light tea-stained parchment and Courier New with a subtle worn-ink texture, including the physical station display. Original synthesized key clacks, spacebar sounds and a carriage-return bell start at 25% volume; use the sound checkbox to mute or adjust the volume slider. Sounds stop when the tool closes. Writing saves, exports TXT and copies drafts into the digital journal. Journal entries hold text, images, collages and file attachments.
+
+Writing-library **Dictionary** and **The Artist’s Way** buttons open inside the office. Dictionary looks up English words using [Free Dictionary API](https://dictionaryapi.dev/) and turns through their meanings like pages; online lookup needs internet access and shares the searched word with that service. Upload a dictionary to the writing shelf to read your own copy instead. **The Artist’s Way** opens an upload slot until you add your PDF, EPUB or text copy, then opens directly in the page-turning reader with a saved bookmark. Copyrighted books are not bundled. Existing writing-library uploads remain available.
 
 ## Crafts and Blender
 

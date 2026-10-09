@@ -15,6 +15,8 @@
 
 This personal build also has shared **Break floor** and **Classroom & study hall** destinations in the elevator. Their revised layouts include six dining tables, a window lounge, southeast bathrooms and southwest storage; the study hall has nine classroom desks, four reading laptops for MP4 lessons and a saved notes, schedules and awards wall. [Study hall instructions](docs/study-hall.md) cover saved lectures, hand raising, subject reading with highlights and notes, and homework in backpacks or break-floor lockers. Curriculum content and an AI tutor are planned separately. Multiple tabs in one browser share one active avatar.
 
+The creative studio's typewriter now has light parchment, Courier New ink texture and adjustable mechanical sounds. Dictionary and *The Artist’s Way* open in app; add your own copy of the latter. See [studio instructions](docs/studios.md).
+
 Sit **Claude Code**, **Codex**, **OpenCode**, **Grok**, **Muse**, **DeepSeek Harness** and **Cursor** workers at desks, watch each one's terminal on the laptop in front of it,
 and jump into any of them together. Every GitHub repo is a floor of the building.
 

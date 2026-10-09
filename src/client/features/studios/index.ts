@@ -10,6 +10,7 @@ import { StudioWorld } from './world';
 import { MusicStudio } from './music';
 import { ArtStudio } from './art';
 import { WritingDesk } from './writing';
+import { typewriterPaper } from './typewriter-paper';
 import { CraftStudio } from './craft';
 import { StationLibrary } from './library';
 import { StationVideo } from './video';
@@ -27,7 +28,7 @@ export function installStudios(ctx:Ctx){
   const textures=new Map<string,THREE.Texture>();
   const texture=(station:string,t:THREE.Texture)=>{t.colorSpace=THREE.SRGBColorSpace;creativeWorld().texture(station,t);textures.get(station)?.dispose();textures.set(station,t);};
   const art=new ArtStudio(texture),music=new MusicStudio(),workshop=new CraftStudio(craftWorld),video=new StationVideo();
-  const writing=new WritingDesk(text=>{const c=document.createElement('canvas');c.width=900;c.height=600;const g=c.getContext('2d')!;g.fillStyle='#e8d8b6';g.fillRect(0,0,900,600);g.fillStyle='#302920';g.font='25px monospace';text.split('\n').slice(0,18).forEach((s,i)=>g.fillText(s.slice(0,60),30,40+i*30));texture('writing',new THREE.CanvasTexture(c));});
+  const writing=new WritingDesk(text=>texture('writing',typewriterPaper(text)));
   const creativeLibrary=new StationLibrary('creative-library',(s,a)=>video.play(creativeWorld(),s,a)),craftLibrary=new StationLibrary('craft-library',(s,a)=>video.play(craftWorld(),s,a));
   const open=(station:string)=>{const isCraft=store.floor===CRAFT,p=panel(isCraft?'🧵 Craft station · '+station:'🎨 Creative station · '+station),library=isCraft?craftLibrary:creativeLibrary;
     const run=(fn:()=>unknown)=>{p.modal.close();return fn();};
