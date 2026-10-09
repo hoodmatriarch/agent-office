@@ -4,6 +4,7 @@ import { ROOF, ROOF_NAME } from '../../shared/rooftop';
 import type { FloorInfo } from '../../shared/protocol';
 import { store } from '../state';
 import { h } from './dom';
+import { BUILTIN_FLOORS } from '../../shared/builtin-floors';
 
 // The floor list that drops down from the project in the corner: every floor of the building, top
 // floor first. Picking one takes you straight there, to the same spot in the office you're standing
@@ -87,7 +88,9 @@ export function toggleFloorMenu(anchor: HTMLElement, opts: FloorMenuOptions): vo
       close();
       opts.roof?.();
     });
-    el.replaceChildren(h('div.floor-menu-head', {}, `🏢 ${floors.length} floor${floors.length === 1 ? '' : 's'}`), ...(floors.length && opts.roof ? [roof] : []), ...items, add);
+    const shared = [...BUILTIN_FLOORS.values()].map(f => { const here = store.floor === f.id; const button = h('button.floor-item', { type:'button', role:'menuitem', class:here?'here':'', disabled:here }, h('span.floor-no',{style:'background:#537b65'},f.icon),h('span.floor-text',{},h('span.floor-name',{},f.name),h('span.floor-sub',{},here?'you are here':'Take the elevator to this shared floor'))); button.onclick=()=>{ if(!here){close();opts.go(f.id);} }; return button; });
+    const count = floors.length + shared.length;
+    el.replaceChildren(h('div.floor-menu-head', {}, `🏢 ${count} floor${count === 1 ? '' : 's'}`), ...(floors.length && opts.roof ? [roof] : []), ...shared, ...items, add);
   };
 
   const place = () => {

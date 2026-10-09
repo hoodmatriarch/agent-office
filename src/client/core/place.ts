@@ -4,6 +4,7 @@
  */
 import { ELEVATOR, ELEVATOR_CAR, FLOOR, POLE, SLAB, STOREY, WALL_HEIGHT, inElevator, inWing } from '../../shared/layout';
 import { ROOF, ROOF_NAME } from '../../shared/rooftop';
+import { builtinFloor } from '../../shared/builtin-floors';
 import type { Arrival } from '../features/climbing/controller';
 import { rememberSpot, store, type Spot } from '../state';
 import type { Ctx } from './context';
@@ -55,7 +56,7 @@ export function installPlace(ctx: Ctx, core: CoreState, parts: Pick<Parts, 'worl
     // Sitting, it's where you'd get up to; in a car, where you'd get out.
     const { driver } = parts.cars;
     const at = (driver.active ? driver.wayOut() : player.standingSpot()) ?? player.pos;
-    const name = store.floor === ROOF ? ROOF_NAME : (store.currentFloor()?.name ?? '');
+    const name = builtinFloor(store.floor)?.name ?? (store.floor === ROOF ? ROOF_NAME : (store.currentFloor()?.name ?? ''));
     return { floor: store.floor, name, map: plan().id, x: at.x, y: at.y, z: at.z, facing: player.facing, ...(onThrone() ? { throne: true } : {}) };
   }
 

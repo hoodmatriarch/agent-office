@@ -4,6 +4,7 @@
 import { IS_MAC } from './termkeys';
 
 export const HELP_ROWS: readonly (readonly [string, string])[] = [
+  ['🎓', 'Classroom & study hall: take the elevator, choose a desk, read subject material with notes and highlights, raise your hand, and keep homework in your backpack or break-floor locker'],
   ['W A S D', 'Walk (hold Shift to run)'],
   ['Space', 'Jump'],
   ['☕', 'Press E at the coffee machine in the kitchen for a minute of quicker walking and higher jumps. Three cups in a row gives you the jitters'],
@@ -11,7 +12,7 @@ export const HELP_ROWS: readonly (readonly [string, string])[] = [
   ['Click / E', "Use what you look at: hire a worker, open its terminal, read a board, call a meeting in the meeting room, watch the TV, put a song on the jukebox, tee off from the balcony, sit on a couch, a beanbag, a chair or the balcony bench (walk off to get up)"],
   ['👥', 'Click someone under "In the office" to walk over to them (on another floor, you ride the elevator first). The line under their name says what they have open or where they are'],
   ['🛗', 'Every project is a floor: step into the elevator on the north wall and press E (or click the project name, top left) to go to another one or add a project. It goes down to the garage too, and back up from there'],
-  ['🤖', 'An agent stands by the issues board, the PR board and the task queue. Press E at one and type what you want: it runs as an agent that knows that board. O there opens its terminal, X sends it home'],
+  ['🤖', 'An agent stands by the issues board, the PR board and the task queue. Press E at one and type what you want: it runs as an agent that knows that board. O there opens its terminal; Hide, ✕ or Esc closes the terminal without sending it home; X sends it home'],
   ['📝', 'The whiteboard on wheels between the desks and the lounge: press E to draw on it with everyone on your floor, live. What you draw stays up on the board'],
   ['🕹️', 'The arcade cabinet in the lounge plays BLOCKFALL: arrows (or WASD) move and turn, Space drops, C holds, P pauses. Everyone on the floor sees your game on it, and E there watches whoever is playing. One of your workers needing input pauses it'],
   ['🎉', 'Whenever a pull request merges, the gong next to the PR board rings, confetti rains down all over the floor and every worker gets up on its desk for a quick dance. Walk up to the gong and press E to bang it yourself'],
@@ -24,6 +25,9 @@ export const HELP_ROWS: readonly (readonly [string, string])[] = [
   ['P', 'Prompt: give a task to a new or existing worker at the desk you face'],
   ['C', 'Changes: what the worker at the desk you face changed — files and diff, commit, discard, open a PR'],
   ['B', 'Open a shared shell (dev servers, git, tests) at an empty desk'],
+  ['F2', 'Ask Pip, the blue office guide: beginner explanations, example prompts, and an optional walking tour. E near Pip talks to him; Ask Pip on screen opens the same guide'],
+  ['🌿', 'The break floor: take the elevator, then explore with the normal office controls. Use the Floor guide to walk to food, kitchen shifts, books, drawing, documents, lockers and storage. No GitHub project is needed.'],
+  ['📺', 'Boss TV: E at the World’s Best Boss plaque loads your original U.S. Office intro. The monitor loops silently; its theme plays from the desk every 15 minutes at 80% in the boss office and 45% in the main work area. Minesweeper stays on the boss’s chair'],
   ['R', 'Resume a sleeping worker'],
   ['X', 'Send a worker home (frees the desk)'],
   ['L', 'Hang a big sign over the desk you face ("Operations", "Code cleanup"), or change or take down the one there'],
