@@ -357,8 +357,9 @@ test('interactions: one definition per kind, with its reach, hint and use', () =
 /** Every .ts file in the client, by its path under src/client, with its code (its comments taken out). */
 function clientSources(): { file: string; src: string }[] {
   const root = path.join(import.meta.dirname, '../src/client');
-  const code = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
-  return (readdirSync(root, { recursive: true }) as string[]).filter((rel) => rel.endsWith('.ts')).map((file) => ({ file, src: code(readFileSync(path.join(root, file), 'utf8')) }));
+  // Preserve quoted literals: video/* and https:// are data, not comments.
+  const code = (src: string) => src.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\/\*[\s\S]*?\*\/|\/\/[^\r\n]*/g, token => token.startsWith('/') ? token.replace(/[^\r\n]/g, ' ') : token);
+  return (readdirSync(root, { recursive: true }) as string[]).filter((rel) => rel.endsWith('.ts')).map((file) => ({ file: file.split(path.sep).join('/'), src: code(readFileSync(path.join(root, file), 'utf8')) }));
 }
 
 /**

@@ -15,6 +15,8 @@ import { builtFloors, floorWings } from './floors';
 import { aside, hintTitle, key, onE } from './hint';
 import type { Parts } from './parts';
 import { FAR } from './scene';
+import { builtinFloor, BUILTIN_FLOORS } from '../../shared/builtin-floors';
+import { floorTravel } from './floor-worlds';
 import { streetOf } from './worlds';
 
 // The kinds of thing you can use that this defines (see InteractKinds in world/types.ts).
@@ -39,13 +41,14 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
    * tall as there are floors, with the street as far down as this one is up.
    */
   function syncStack() {
-    const floors = builtFloors();
+    const projects = builtFloors();
+    const floors = [...projects, ...BUILTIN_FLOORS.values()];
     const index = floors.findIndex((f) => f.id === store.floor);
     // Up on the roof there's no ladder or pole to take: nothing above, nothing below.
     const up = store.floor === ROOF ? undefined : floors[index + 1]?.name;
     const down = index > 0 ? floors[index - 1]?.name : undefined;
     const count = index < 0 ? 1 : floors.length;
-    const wings = floorWings(floors);
+    const wings = [...floorWings(projects), ...[...BUILTIN_FLOORS].map(() => 0)];
     // A map of its own is a hall on the ground: nothing under its floor to fall to, but its dungeon's.
     player.street = inOffice() ? streetBelow(index) : streetOf(ctx.world());
     const s = office.stack.state;
@@ -104,6 +107,7 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
 
   /** The elevator where you are: the office's, its stop down in the garage, or the one up on the roof. None on a map of its own. */
   function lift() {
+    if (!core.upTop && ctx.world().elevator) return ctx.world().elevator!;
     if (!inOffice()) return null;
     const roof = parts.rooftop.roof();
     return core.upTop && roof ? roof.elevator : downstairs() ? office.garageLift : office.elevator;
@@ -117,7 +121,7 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
    */
   function ride(to: string, keepWalking = false): void {
     // A map of its own has no elevator: straight there, and no roof or garage to go to.
-    if (!inOffice()) {
+    if (!inOffice() && !ctx.world().elevator) {
       if (to === ROOF || to === GARAGE) {
         parts.walking.stopWalkingTo();
         toast(`There's no ${to === ROOF ? 'rooftop bar' : 'garage'} on this map (${plan().icon} ${plan().name})`, 'warn');
@@ -129,7 +133,7 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
       return switchFloor(to, keepWalking);
     }
     const garage = to === GARAGE;
-    const floorId = garage ? (core.upTop || !store.floor ? builtFloors()[0]?.id : store.floor) : to;
+    const floorId = garage ? (core.upTop || !store.floor || builtinFloor(store.floor) ? builtFloors()[0]?.id : store.floor) : to;
     if (core.trip || !floorId || (floorId === store.floor && garage === downstairs())) return;
     closeAllModals();
     stopForTrip();
@@ -195,7 +199,7 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
     // The roof isn't laid out like a floor: to and from it, it's the elevator (and on a map with no
     // roof, straight down off it).
     if (core.upTop && !inOffice()) return leaveRoofFor(floorId);
-    if (core.upTop || floorId === ROOF) return ride(floorId);
+    if (core.upTop || floorId === ROOF || ctx.world().elevator || (builtinFloor(floorId) && inOffice())) return ride(floorId);
     if (core.trip || floorId === store.floor) return;
     // Outside, the same spot on another floor looks just like this one: the elevator brings you in
     // to that floor instead, into its car.
@@ -339,5 +343,6 @@ export function installTravel(ctx: Ctx, core: CoreState, parts: TravelParts) {
     doorsOpen();
   }
 
+  floorTravel.ride = ride; floorTravel.elevator = showElevator;
   return { syncStack, takenAway, showElevator, lift, ride, switchFloor, travel, leaveRoofFor, setPlace, arrive, pending };
 }
