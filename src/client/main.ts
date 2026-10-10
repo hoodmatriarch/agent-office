@@ -35,6 +35,7 @@ import { installStudy } from './features/study';
 import { installStudios } from './features/studios';
 import { installReading } from './features/reading';
 import { installResources } from './features/resources';
+import { installCapacity } from './features/capacity';
 import { installBar } from './features/bar';
 import { installBarGames } from './features/bargames';
 import { installBasketball } from './features/basketball';
@@ -193,6 +194,7 @@ installStudy(ctx);
 installStudios(ctx);
 installReading(ctx);
 installResources(ctx);
+installCapacity(ctx);
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

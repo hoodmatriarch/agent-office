@@ -22,7 +22,7 @@ The same independent game modules have a standalone entry at `/kitchen.html`. Th
 
 ## Books and art
 
-The library uploads PDF, EPUB, TXT and Markdown files up to 80 MB. Pick **Take book to couch** to sit in the window lounge and read. PDF retains original pages; EPUB displays the book's text in reflowed pages, without its original illustrations or layout. Click page edges, Previous/Next, or arrow keys to turn pages; Go selects a page. Closing saves your bookmark. Download original preserves access to the full uploaded file. DRM-protected EPUB/PDF books are not supported.
+The library uploads PDF, EPUB, TXT and Markdown files up to 512 MB. Pick **Take book to couch** to sit in the window lounge and read. PDF retains original pages; EPUB displays the book's text in reflowed pages, without its original illustrations or layout. Click page edges, Previous/Next, or arrow keys to turn pages; Go selects a page. Closing saves your bookmark. Download original preserves access to the full uploaded file. DRM-protected EPUB/PDF books are not supported.
 
 The built-in drawing desk has brush, eraser, line, rectangle, ellipse and text, colors, width, undo and redo. Editable strokes save automatically and the drawing stays visible on the desk. **Download PNG** exports to your laptop. **Save PNG to art shelf** makes an image copy before starting a new blank canvas. Save failures are shown; retry or download before closing when a save fails. Simultaneous edits in another tab are rejected rather than silently overwriting them. This canvas is persistent rather than a live collaborative whiteboard.
 

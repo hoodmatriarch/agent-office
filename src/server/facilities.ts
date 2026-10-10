@@ -1,12 +1,13 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { READING_BUCKETS } from '../shared/reading.js';
 import { STUDIO_BUCKETS,STUDIO_TYPES } from '../shared/studio-files.js';
+import { MAX_UPLOAD_BYTES,uploadLimitLabel } from '../shared/capacity.js';
 
 export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library', 'study-notices',...STUDIO_BUCKETS,...READING_BUCKETS] as const;
 export type Bucket = typeof BUCKETS[number];
-export const MAX_ASSET = 80 * 1024 * 1024;
+export const MAX_ASSET = MAX_UPLOAD_BYTES;
 export interface Asset { id: string; name: string; type: string; size: number }
 interface Saved { revision: number; value: unknown }
 const TYPES: Record<string, string> = { pdf: 'application/pdf', epub: 'application/epub+zip', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', txt: 'text/plain', md: 'text/plain', csv: 'text/plain' };
@@ -31,7 +32,7 @@ export class Facilities {
     return saved;
   }
   upload(name: string, body: Buffer): Asset {
-    if (!body.length || body.length > MAX_ASSET) throw new Error('Choose a non-empty file under 80 MB.');
+    if (!body.length || body.length > MAX_ASSET) throw new Error(`Choose a non-empty file up to ${uploadLimitLabel}.`);
     const safeName = path.basename(name.replace(/\\/g, '/')).replace(/[\x00-\x1f]/g, '').slice(0, 180) || 'file';
     const extension = safeName.split('.').pop()!.toLowerCase();
     const type = TYPES[extension] ?? STUDIO_TYPES[extension] ?? 'application/octet-stream';
@@ -47,6 +48,13 @@ export class Facilities {
     const meta = path.join(this.dir, id + '.json');
     if (!existsSync(meta)) return null;
     return { asset: JSON.parse(readFileSync(meta, 'utf8')) as Asset, body: readFileSync(path.join(this.dir, id + '.bin')) };
+  }
+  fileLocation(id:string):{asset:Asset;file:string}|null {
+    if(!/^[0-9a-f-]{36}$/.test(id))return null;
+    const meta=path.join(this.dir,id+'.json'),file=path.join(this.dir,id+'.bin');
+    if(!existsSync(meta)||!existsSync(file))return null;
+    const asset=JSON.parse(readFileSync(meta,'utf8')) as Asset;asset.size=statSync(file).size;
+    return {asset,file};
   }
   private atomic(file: string, text: string) {
     const dest = path.join(this.dir, file), temp = dest + '.' + randomUUID() + '.tmp';

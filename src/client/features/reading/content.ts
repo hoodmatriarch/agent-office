@@ -7,9 +7,9 @@ export interface BookContent { total: number; render(page: number, width: number
 const pageCleanup=new WeakMap<HTMLElement,()=>void>();
 export function releasePage(page:HTMLElement){pageCleanup.get(page)?.();pageCleanup.delete(page);}
 export async function openContent(asset: Asset, signal: AbortSignal): Promise<BookContent> {
-  const response = await fetch(assetUrl(asset), { signal }); if (!response.ok) throw new Error('The original book could not be loaded.');
-  const bytes = new Uint8Array(await response.arrayBuffer());
   if (asset.type !== 'application/pdf') {
+    const response = await fetch(assetUrl(asset), { signal }); if (!response.ok) throw new Error('The original book could not be loaded.');
+    const bytes = new Uint8Array(await response.arrayBuffer());
     const pages = textPages(/\.epub$/i.test(asset.name) ? epubText(bytes) : new TextDecoder().decode(bytes));
     return { total: pages.length, async render(page, width) {
       const leaf = h('article.reading-page', { 'data-reading-page': page, 'aria-label': `Book page ${page + 1}`, style: `width:${width}px;min-height:${width * 1.3}px` });
@@ -17,7 +17,7 @@ export async function openContent(asset: Asset, signal: AbortSignal): Promise<Bo
     }, close() {} };
   }
   const api = await import('pdfjs-dist'); api.GlobalWorkerOptions.workerSrc = workerUrl;
-  const loading = api.getDocument({ data: bytes, useSystemFonts: true });
+  const loading = api.getDocument({ url:assetUrl(asset),rangeChunkSize:256*1024,disableStream:true,disableAutoFetch:true,useSystemFonts:true });
   const abort = () => { void loading.destroy(); }; signal.addEventListener('abort', abort, { once: true });
   let pdf: PDFDocumentProxy;
   try { pdf = await loading.promise; } catch (e) { signal.removeEventListener('abort', abort); throw e; }

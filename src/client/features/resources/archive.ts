@@ -4,6 +4,7 @@ import { assetUrl,upload } from '../facilities/data';
 import { STATIONS,type ArchiveItem } from '../../../shared/resources';
 import { archiveStore } from './store';
 import { openResource } from './view';
+import { archiveTools } from './tools';
 function stationChoices(selected:string[]=[]){
   const fields=Object.entries(STATIONS).map(([id,label])=>({id,field:h('input',{type:'checkbox',checked:selected.includes(id),'aria-label':label}),label}));
   return {el:h('fieldset.archive-stations',{},h('legend',{},'Available at these stations'),...fields.map(({field,label})=>h('label',{},field,' '+label))),value:()=>fields.filter(f=>f.field.checked).map(f=>f.id)};
@@ -18,6 +19,7 @@ export async function editAssignments(id:string){
 }
 export async function openArchives(){
   let data=await archiveStore();const p=panel('🗃️ Station library archives',true),search=input('Search archive files, sections or tags'),filter=h('select',{'aria-label':'Filter archive station'}),list=h('div.fac-grid');
+  p.body.append(h('div.fac-toolbar',{},...[...archiveTools.values()].map(tool=>tool(()=>p.modal.close()))));
   filter.append(h('option',{value:''},'All station assignments'),h('option',{value:'unassigned'},'Unassigned files'),...Object.entries(STATIONS).map(([id,label])=>h('option',{value:id},label)));
   const render=()=>{
     const q=search.field.value.toLowerCase();list.replaceChildren();
@@ -28,7 +30,7 @@ export async function openArchives(){
   };
   search.field.oninput=render;filter.onchange=render;
   const title=input('Upload title (optional)'),section=input('Library section','General'),tags=input('Upload tags'),stations=stationChoices();
-  p.body.append(h('p',{},'Upload once, organize here, and choose every station where the material belongs. Existing shelf uploads are included. Files stay in your local office cabinet, separate from GitHub.'),search.row,filter,list,h('h3',{},'Upload to the central archive'),title.row,section.row,tags.row,stations.el,h('p',{},'PDF, EPUB, MP4, images, audio, patterns and other files · up to 80 MB each'),chooseFile('*',async file=>{
+  p.body.append(h('p',{},'Upload once, organize here, and choose every station where the material belongs. Existing shelf uploads are included. Files stay in your local office cabinet, separate from GitHub.'),search.row,filter,list,h('h3',{},'Upload to the central archive'),title.row,section.row,tags.row,stations.el,h('p',{},'PDF, EPUB, MP4, images, audio, patterns and other files · up to 512 MB each'),chooseFile('*',async file=>{
     data=await archiveStore();const asset=await upload(file),item:ArchiveItem={id:crypto.randomUUID(),title:title.field.value.trim().slice(0,160)||file.name,folder:'Library archives',section:section.field.value.trim().slice(0,160)||'General',tags:tags.field.value.slice(0,300),note:'',stations:stations.value(),asset,page:0};
     data.value.unshift(item);await data.save();render();toast('Original stored once; available at your selected stations.');
   }));render();

@@ -1,7 +1,8 @@
 import { BUCKETS, Facilities, MAX_ASSET, type Bucket } from '../../facilities.js';
-import { readBytes, readBody, sameOrigin, send } from '../util.js';
+import { readBody, sameOrigin, send } from '../util.js';
 import type { Route } from '../router.js';
-import { serveMedia } from '../../studios/media.js';
+import { streamMedia } from '../../storage/media.js';
+import { uploadStream,UploadError } from '../../storage/uploads.js';
 
 export const facilitiesRoute: Route = {
   prefix: '/api/facilities/', auth: 'session',
@@ -20,20 +21,17 @@ export const facilitiesRoute: Route = {
         return saved ? send(res, 200, saved) : send(res, 409, { error: 'Another window saved changes. Reload this collection before saving again.' });
       }
       if (path === '/api/facilities/upload' && req.method === 'POST') {
-        if (Number(req.headers['content-length']) > MAX_ASSET) return send(res, 413, { error: 'Files may be up to 80 MB.' });
-        const body = await readBytes(req, MAX_ASSET);
-        return send(res, 200, vault.upload(url.searchParams.get('name') ?? '', body));
+        return send(res,200,await uploadStream(vault.dir,url.searchParams.get('name')??'',req,req.headers['content-length']===undefined?undefined:Number(req.headers['content-length'])));
       }
       if (path === '/api/facilities/file' && req.method === 'GET') {
-        const file = vault.file(url.searchParams.get('id') ?? '');
+        const file = vault.fileLocation(url.searchParams.get('id') ?? '');
         if (!file) return send(res, 404, { error: 'File not found' });
-        const { asset, body } = file;
-        return serveMedia(res,asset,body,req.headers.range,url.searchParams.get('download')==='1');
+        return streamMedia(res,file.asset,file.file,req.headers.range,url.searchParams.get('download')==='1');
       }
       return send(res, 404, { error: 'Not found' });
     } catch (error) {
       const message = (error as Error).message;
-      return send(res, message === 'too large' ? 413 : 400, { error: message === 'too large' ? 'Files may be up to 80 MB.' : message });
+      return send(res,error instanceof UploadError?error.status:400,{error:message});
     }
   },
 };

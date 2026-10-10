@@ -6,6 +6,7 @@ import { agentRoutes } from './agents.js';
 import { authRoutes } from './auth.js';
 import { fileRoutes } from './files.js';
 import { facilitiesRoute } from './facilities.js';
+import { storageRoute } from './storage.js';
 import { studiosRoute } from './studios.js';
 import { dictionaryRoute } from './dictionary.js';
 import { githubRoutes } from './github.js';
@@ -31,6 +32,7 @@ export const routes: readonly Route[] = [
   // Signed in.
   authRoutes.whoami,
   facilitiesRoute,
+  storageRoute,
   studiosRoute,
   dictionaryRoute,
   agentRoutes.models,

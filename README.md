@@ -414,6 +414,8 @@ Every change to the app that lands on `main` is published as a GitHub release by
 
 ## More
 
+Uploads support **512 MB per file** with streaming to disk and a free-space reserve. Open **Station library archives → Storage & performance** to check cabinet size, largest files, free disk, memory and current view performance. See [capacity and world-building strategy](docs/reading-and-archives.md#capacity-and-growing-your-world).
+
 Upload learning files once in **Store room → Documents → Station library archives**, categorize them by section and assign them to multiple station shelves. PDF books open with corner-click page turns, facing pages, highlights and a notes sheet with citations back to the book. See [Reading and station archives](docs/reading-and-archives.md).
 
 - [Features](docs/features.md): everything in the office, room by room

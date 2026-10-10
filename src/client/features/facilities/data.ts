@@ -1,4 +1,6 @@
 import type { READING_BUCKETS } from '../../../shared/reading';
+import { MAX_UPLOAD_BYTES,uploadLimitLabel } from '../../../shared/capacity';
+import { sendUpload } from '../capacity/transfers';
 import type { STUDIO_BUCKETS } from '../../../shared/studio-files';
 export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen' | 'vending' | 'study' | 'study-library' | 'study-notices' | typeof STUDIO_BUCKETS[number] | typeof READING_BUCKETS[number];
 export interface Asset { id: string; name: string; type: string; size: number }
@@ -29,6 +31,6 @@ export async function request(url: string, options?: RequestInit) {
 }
 export const assetUrl = (asset: Asset, download = false) => `/api/facilities/file?id=${encodeURIComponent(asset.id)}${download ? '&download=1' : ''}`;
 export const upload = async (file: File): Promise<Asset> => {
-  if (file.size > 80 * 1024 * 1024) throw new Error('Choose a file under 80 MB.');
-  return request(`/api/facilities/upload?name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file });
+  if (file.size > MAX_UPLOAD_BYTES) throw new Error(`Choose a file up to ${uploadLimitLabel}.`);
+  return sendUpload(file);
 };

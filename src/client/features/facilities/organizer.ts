@@ -29,7 +29,7 @@ export class Organizer {
     search.field.oninput = render;
     body.append(h('p', {}, 'A home for work that does not need GitHub. Files upload to this office’s local storage; links open the original app. Google and Canva links do not grant the office account access or automatic syncing.'),
       h('div.fac-toolbar', {}, h('a.btn', { href: 'https://docs.google.com/document/', target: '_blank', rel: 'noopener noreferrer' }, 'Google Docs'), h('a.btn', { href: 'https://docs.google.com/spreadsheets/', target: '_blank', rel: 'noopener noreferrer' }, 'Google Sheets'), h('a.btn', { href: 'https://www.canva.com/', target: '_blank', rel: 'noopener noreferrer' }, 'Canva'), action('Switch list / mood board', () => { mood = !mood; render(); })), search.row, list,
-      h('h3', {}, 'Add a file or a link'), title.row, folder.row, tags.row, note.row, url.row, action('Save link', async () => { const link = new URL(url.field.value); if (link.protocol !== 'https:') throw new Error('Use an https link.'); const item = fields(); if (!item.title) throw new Error('Give this item a name.'); this.data.value.unshift({ ...item, url: link.href }); await this.data.save(); render(); }, true), h('p', {}, 'Or upload a local file (up to 80 MB):'), file);
+      h('h3', {}, 'Add a file or a link'), title.row, folder.row, tags.row, note.row, url.row, action('Save link', async () => { const link = new URL(url.field.value); if (link.protocol !== 'https:') throw new Error('Use an https link.'); const item = fields(); if (!item.title) throw new Error('Give this item a name.'); this.data.value.unshift({ ...item, url: link.href }); await this.data.save(); render(); }, true), h('p', {}, 'Or upload a local file (up to 512 MB):'), file);
     render();
   }
 }
