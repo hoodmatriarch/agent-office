@@ -1,0 +1,10 @@
+.study-call{position:fixed;top:124px;left:14px;z-index:5}
+.study-call[hidden]{display:none}
+.study-reading-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:20px;align-items:start}
+.study-notes{position:sticky;top:0;padding:16px;background:#edf2e9;border-radius:12px;display:grid;gap:12px}
+.study-notes textarea{width:100%;min-height:180px}
+.study-notes mark{display:block;margin:8px 0;white-space:pre-wrap}
+.study-page canvas{max-width:100%;height:auto}
+.study-transcript{user-select:text;cursor:text;white-space:pre-wrap}
+.study-reader{width:min(1250px,96vw)}
+@media(max-width:800px){.study-reading-layout{grid-template-columns:1fr}.study-notes{position:static}}

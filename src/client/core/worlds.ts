@@ -13,6 +13,7 @@ import { officeWorld, type World } from '../world/world';
 import type { Ctx } from './context';
 import { noOutline } from './outline';
 import { idleAgentsIn, type IdleAgent } from './stations';
+import { floorWorlds } from './floor-worlds';
 
 /** A map's world, with its court (on a castle-style map) and the board agents waiting in it. */
 export interface MapWorld {
@@ -44,6 +45,8 @@ export function createWorlds(ctx: Ctx) {
 
   /** The world for `p`: the office, or the one its style's builder puts up for it, the first time it's wanted. */
   function worldFor(p: MapPlan): MapWorld {
+    const shared = store.floor && floorWorlds.get(store.floor);
+    if (shared) { const world = shared(); if (!world.group.parent) { scene.add(world.group); noOutline(world.group); } return { world, court: null, idle: [] }; }
     if (p.style === 'office') return { world: theOffice, court: null, idle: officeIdle };
     let b = built.get(p.id);
     // A map of your own was edited since: it's built again.

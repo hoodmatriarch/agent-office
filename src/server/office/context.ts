@@ -139,6 +139,8 @@ export interface People {
 
 /** Going between floors (office/navigation.ts). */
 export interface Navigation {
+  /** Takes a visitor to a shared facility without creating a project or coding workers. */
+  goToBuiltinFloor(c: Client, id: string): void;
   /**
    * Takes `c` to another floor: everyone sees them leave and arrive, and they get the new floor's
    * everything. They arrive in the elevator, or `at` the spot they came by.

@@ -11,6 +11,7 @@ import { noOutline } from '../../core/outline';
 import { djFrame, djTime } from '../../dnb';
 import { store } from '../../state';
 import { buildRooftop, type Rooftop } from './world';
+import { BUILTIN_FLOORS } from '../../../shared/builtin-floors';
 
 export interface RooftopDeps {
   /** The office's lights, which the roof's strobes flash as a drop lands. */
@@ -24,7 +25,7 @@ export function installRooftop(ctx: Ctx, deps: RooftopDeps) {
   function theRoof(): Rooftop {
     if (!roof) {
       roof = buildRooftop(ctx.office.night, roofFloors());
-      roof.setFloors(roofFloors(), floorWings(builtFloors()));
+      roof.setFloors(roofFloors(), [...floorWings(builtFloors()), ...[...BUILTIN_FLOORS].map(() => 0)]);
       roof.group.visible = false;
       roof.games.onDrop = (at) => ctx.sound.toss('drop', at);
       ctx.scene.add(roof.group);
@@ -34,13 +35,13 @@ export function installRooftop(ctx: Ctx, deps: RooftopDeps) {
   }
   /** How many floors the roof stands on: every one that's built. */
   function roofFloors(): number {
-    return Math.max(1, builtFloors().length);
+    return Math.max(1, builtFloors().length + BUILTIN_FLOORS.size);
   }
   /** Floors come and go: the roof goes up or down with them, and the street's that much further down from it. */
   function syncRoof() {
     if (!roof) return;
     const floors = roofFloors();
-    roof.setFloors(floors, floorWings(builtFloors()));
+    roof.setFloors(floors, [...floorWings(builtFloors()), ...[...BUILTIN_FLOORS].map(() => 0)]);
     if (ctx.upTop()) ctx.sky.setRoof(true, roofDrop(floors));
   }
   store.on('floors', syncRoof);
