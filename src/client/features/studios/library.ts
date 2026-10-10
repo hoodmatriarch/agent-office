@@ -3,6 +3,7 @@ import { Library } from '../facilities/library';
 import { upload,assetUrl,type Asset,type Bucket } from '../facilities/data';
 import { panel,action,chooseFile } from './panels';
 import { writingBook } from './writing-references';
+import { archiveStore,archiveUpload,stationCards,openResource } from '../resources';
 export const REFERENCES:Record<string,{terms:string;links:[string,string][]}>={
  music:{terms:'Tempo = the speed of the beat. MIDI = editable musical notes; it does not contain sound. WAV = your actual recorded sound. A sample is a recording played at different pitches. Root note is the original pitch of that sample.',links:[['FL Studio manual','https://www.image-line.com/fl-studio-learning/fl-studio-online-manual/'],['BandLab','https://www.bandlab.com/'],['SUNO','https://suno.com/']]},
  sketch:{terms:'Line weight is how thick a drawn line is. Negative space is the area around the subject. Save finished sketches to your sketchbooks before starting a new drawing.',links:[['ChatGPT image workspace','https://chatgpt.com/']]},
@@ -18,11 +19,12 @@ export class StationLibrary {
   constructor(bucket:Bucket,private screen:(station:string,asset:Asset)=>void){this.reader=new Library(bucket);}
   async open(station:string) {
     await this.reader.data.load();const p=panel('📚 '+station+' · learning library',true),list=h('div.fac-grid'),ref=REFERENCES[station]??REFERENCES.sketch;
+    let archive=await archiveStore();
     const books=()=>this.reader.data.value.filter(b=>(b as typeof b&{station?:string}).station===station);
-    const render=()=>{list.replaceChildren(...books().map(b=>h('article.fac-card',{},h('strong',{},b.title),action(b.asset.type==='video/mp4'?'Watch lesson / play on screen':'Read & turn pages',()=>{this.reader.selected=b;p.modal.close();return b.asset.type==='video/mp4'?this.readVideo(b.asset,station):this.reader.read();}),h('a.btn',{href:assetUrl(b.asset,true),download:b.asset.name},'Download original'))));};
+    const render=()=>{list.replaceChildren(...stationCards(archive.value,station,item=>{p.modal.close();return openResource(item,a=>this.screen(station,a));}));if(!list.children.length)list.append(h('p',{},'No material assigned to this station. Add it here or choose this station in the central archive.'));};
     const references=h('div.fac-toolbar',{},...ref.links.map(([title,url])=>h('a.btn',{href:url,target:'_blank',rel:'noopener noreferrer'},title)));
     if(station==='writing')for(const name of ['Dictionary','The Artist’s Way'] as const)references.append(action(name,()=>{p.modal.close();return writingBook(this.reader,name);}));
-    p.body.append(h('p',{},ref.terms),references,h('p',{},'Your own books, references and MP4 lessons. These shelves belong to this station. Upload books you own; copyrighted books are not bundled.'),chooseFile('.pdf,.epub,.txt,.md,.mp4',async file=>{if(!/\.(pdf|epub|txt|md|mp4)$/i.test(file.name))throw new Error('Choose a book or MP4 lesson.');const asset=await upload(file);this.reader.data.value.push(Object.assign({id:crypto.randomUUID(),asset,title:file.name.replace(/\.[^.]+$/,''),page:0},{station}));await this.reader.data.save();render();}),list);render();
+    p.body.append(h('p',{},ref.terms),references,h('p',{},'Material assigned to this station, grouped by section. Upload here to add it to the central archive and this shelf. Assign more stations in the storeroom document archives.'),chooseFile('*',async file=>{await archiveUpload(file,station);archive=await archiveStore();render();}),list);render();
   }
   private async readVideo(asset:Asset,station:string){const p=panel('🎬 '+asset.name,true);const {readVideo}=await import('./video');readVideo(p.body,p.modal,asset,a=>this.screen(station,a));}
 }

@@ -1,5 +1,7 @@
 # Classroom & study hall
 
+Assign curriculum material to **Study hall** through the central storeroom archive, or upload it on this floor. Books use corner-click flipbook pages, highlights and a notes sheet with citations. See [Reading and station archives](reading-and-archives.md).
+
 Refresh the office and choose **Classroom & study hall** in the elevator. This is a shared native floor, independent of GitHub projects. The revised plan has nine classroom desks facing the north whiteboard, Professor Ellis's desk at the front, a partition open at both ends, four reading desks in the east subject library and a backpack near the southwest corner. Pip explains these tools too.
 
 Press **E** at visible station controls or use **Class & study tools**. Professor Ellis presents saved lectures on the whiteboard and in a readable panel. Students can work on classwork, save test responses, or raise a hand: Ellis walks from the teacher's desk to their seat. Help uses the selected learning approach and authored lesson guidance. Dismiss him to return him to his desk.

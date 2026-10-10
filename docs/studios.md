@@ -48,6 +48,8 @@ References: [OpenAI images](https://developers.openai.com/api/docs/guides/image-
 
 ## Libraries and storage
 
+Use the storeroom **Station library archives** to upload once and assign PDFs, MP4s and other material to multiple stations. Shelves filter by assignment and group by section. Books use a corner-click flipbook reader with highlights, page marks and notes saved to Documents with clickable citations. See [Reading and station archives](reading-and-archives.md) for organization, reading and storage details.
+
 Each station holds PDF/EPUB/TXT/Markdown books and MP4 lessons. Watch with play/pause/seek, or **Play on station screen** while you create. Floating controls pause, adjust volume (starts at 30%) or stop. Floor travel stops playback. Break/classroom libraries also accept MP4.
 
 Creative state, uploads, handoffs and prototypes live under `facilities/<owner hash>` in office data, outside GitHub. Shared-password sessions share a vault; accounts have separate vaults. Each upload may be up to 80 MB; displayed models are limited to 40 MB. GLB must be self-contained. Download important files and back up office data. Revision checks detect other-window saves.

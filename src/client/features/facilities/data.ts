@@ -1,5 +1,6 @@
+import type { READING_BUCKETS } from '../../../shared/reading';
 import type { STUDIO_BUCKETS } from '../../../shared/studio-files';
-export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen' | 'vending' | 'study' | 'study-library' | 'study-notices' | typeof STUDIO_BUCKETS[number];
+export type Bucket = 'studio' | 'library' | 'organizer' | 'records' | 'locker' | 'supplies' | 'kitchen' | 'vending' | 'study' | 'study-library' | 'study-notices' | typeof STUDIO_BUCKETS[number] | typeof READING_BUCKETS[number];
 export interface Asset { id: string; name: string; type: string; size: number }
 export class Collection<T> {
   revision = 0;

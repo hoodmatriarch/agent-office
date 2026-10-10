@@ -36,6 +36,9 @@ export async function dictionaryBook() {
 
 /** Named shelf buttons always open a reader or an in-app upload slot, never an external site. */
 export async function writingBook(reader: Library, name: 'Dictionary' | 'The Artist’s Way') {
+  const {archiveStore,openResource}=await import('../resources');
+  const archive=await archiveStore(),copy=archive.value.find(b=>b.stations?.includes('writing')&&(name==='Dictionary'?/dictionary/i:/artist.?s way/i).test(b.title));
+  if(copy)return openResource(copy);
   await reader.data.load();
   const found = reader.data.value.find(b => {
     const book = b as typeof b & { station?: string; reference?: string };

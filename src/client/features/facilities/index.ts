@@ -38,7 +38,7 @@ export function installFacilities(ctx: Ctx, deps: { walking: Pick<ReturnType<typ
     if (id === 'library') return library.open(book => { room.takeBook(book.title, () => void library.read()); });
     if (id === 'couch') return food.eat(() => library.read());
     if (id === 'organizer') return organizer.open();
-    if (id === 'records') { const p = panel('🗄️ Store room'); p.body.append(action('Employee files', () => storage.files()), action('Work documents, projects & accounting', () => organizer.open()), action('Office supplies', () => storage.inventory())); return; }
+    if (id === 'records') { const p = panel('🗄️ Store room'); p.body.append(action('Employee files', () => storage.files()), action('Work documents, projects & accounting', () => { p.modal.close(); return organizer.open(); }), action('Office supplies', () => storage.inventory())); return; }
     if (id === 'supplies') return storage.inventory();
     if (id === 'locker') return storage.coatLocker();
     if (id === 'men' || id === 'women') {

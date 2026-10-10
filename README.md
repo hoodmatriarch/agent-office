@@ -414,6 +414,8 @@ Every change to the app that lands on `main` is published as a GitHub release by
 
 ## More
 
+Upload learning files once in **Store room → Documents → Station library archives**, categorize them by section and assign them to multiple station shelves. PDF books open with corner-click page turns, facing pages, highlights and a notes sheet with citations back to the book. See [Reading and station archives](docs/reading-and-archives.md).
+
 - [Features](docs/features.md): everything in the office, room by room
 - [Agents](docs/agents.md): Claude Code, Codex and OpenCode, models and effort, and the office's prompts
 - [Configuration](docs/configuration.md): every command-line option, and where the office keeps its data

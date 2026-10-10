@@ -1,11 +1,14 @@
 import { h, toast } from '../../ui/dom';
 import { Collection, upload, assetUrl, type Asset } from './data';
 import { action, chooseFile, input, panel } from './panels';
+import { documentReadingActions } from '../reading/documents';
+import { openArchives } from '../resources';
 interface Item { id: string; title: string; folder: string; tags: string; note: string; asset?: Asset; url?: string }
 export class Organizer {
   readonly data = new Collection<Item[]>('organizer', []);
   async open() {
-    await this.data.load(); const { body } = panel('🗂️ Documents, designs & mood boards', true);
+    await this.data.load(); const { body, modal } = panel('🗂️ Documents, designs & mood boards', true);
+    body.append(action('Station library archives', () => { modal.close(); return openArchives(); }));
     const search = input('Find by name, folder, or tag'), title = input('Name'), folder = input('Folder / project', 'My creative work'), tags = input('Tags', 'ideas'), url = input('Google Docs, Sheets, Canva, or other https link'), note = input('Notes', '', true);
     const list = h('div.fac-grid'); let mood = false;
     const render = () => {
@@ -13,6 +16,7 @@ export class Organizer {
       for (const item of this.data.value.filter(item => `${item.title} ${item.folder} ${item.tags} ${item.note}`.toLowerCase().includes(q))) {
         const card = h('article.fac-card', {}, h('span.fac-kicker', {}, item.folder), h('h3', {}, item.title), h('small', {}, item.tags), h('p', {}, item.note));
         if (item.asset?.type.startsWith('image/')) card.prepend(h('img', { src: assetUrl(item.asset), alt: item.title }));
+        card.append(...documentReadingActions(item,()=>modal.close()));
         if (item.url) card.append(h('a.btn', { href: item.url, target: '_blank', rel: 'noopener noreferrer' }, 'Open in its app'));
         if (item.asset) { card.append(h('a.btn', { href: assetUrl(item.asset, true), download: item.asset.name }, 'Download file')); if (item.asset.type === 'application/pdf') card.append(action('View PDF', () => { const preview = panel(item.title, true); preview.body.append(h('iframe.fac-pdf', { src: assetUrl(item.asset!), title: item.title })); })); }
         card.append(action('Edit details', () => { const edit = panel('Edit item'); const n = input('Name', item.title), f = input('Folder / project', item.folder), t = input('Tags', item.tags), memo = input('Notes', item.note, true); edit.body.append(n.row, f.row, t.row, memo.row, action('Save changes', async () => { Object.assign(item, { title: n.field.value, folder: f.field.value, tags: t.field.value, note: memo.field.value }); await this.data.save(); edit.modal.close(); render(); })); }));

@@ -33,6 +33,8 @@ import { installGuide } from './features/guide';
 import { installFacilities } from './features/facilities';
 import { installStudy } from './features/study';
 import { installStudios } from './features/studios';
+import { installReading } from './features/reading';
+import { installResources } from './features/resources';
 import { installBar } from './features/bar';
 import { installBarGames } from './features/bargames';
 import { installBasketball } from './features/basketball';
@@ -189,6 +191,8 @@ installGuide(ctx, parts);
 installFacilities(ctx, { walking: parts.walking });
 installStudy(ctx);
 installStudios(ctx);
+installReading(ctx);
+installResources(ctx);
 
 // ---- Main loop ---------------------------------------------------------------------------------------
 fitWindow(ctx);

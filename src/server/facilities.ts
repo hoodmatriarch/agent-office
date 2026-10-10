@@ -1,9 +1,10 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import path from 'node:path';
+import { READING_BUCKETS } from '../shared/reading.js';
 import { STUDIO_BUCKETS,STUDIO_TYPES } from '../shared/studio-files.js';
 
-export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library', 'study-notices',...STUDIO_BUCKETS] as const;
+export const BUCKETS = ['studio', 'library', 'organizer', 'records', 'locker', 'supplies', 'kitchen', 'vending', 'study', 'study-library', 'study-notices',...STUDIO_BUCKETS,...READING_BUCKETS] as const;
 export type Bucket = typeof BUCKETS[number];
 export const MAX_ASSET = 80 * 1024 * 1024;
 export interface Asset { id: string; name: string; type: string; size: number }
