@@ -1,0 +1,1 @@
+.archive-stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:16px;border:1px solid #798776;border-radius:8px;margin:16px 0}.archive-stations label{display:flex;gap:8px;align-items:center}.archive-stations input{width:auto}.archive-stations legend{padding:0 8px;font-weight:600}

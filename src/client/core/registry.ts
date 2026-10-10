@@ -363,7 +363,6 @@ export class View<G = unknown> {
     for (const e of this.effects.items) if (e.covers?.()) return true;
     return false;
   }
-
   /** The filters that are on this frame (kept, so drawing one allocates nothing). */
   private readonly on: FrameFilter[] = [];
 

@@ -5,11 +5,17 @@
 
 <div align="center">
 
+**Creative studio & craft workshop:** two new elevator floors with playable piano/sample recording, sketches, writing, mood boards, measured Blender prototypes and MP4 station libraries. See the [studio guide](docs/studios.md) for controls, real-file exports and optional ChatGPT/Claude connections.
+
 *"Whatever you do, work heartily, as for the Lord and not for men."* — Colossians 3:23 (ESV)
 
 # 🏢 Agent Office
 
 **A 3D office your team shares with its coding agents.**
+
+This personal build also has shared **Break floor** and **Classroom & study hall** destinations in the elevator. Their revised layouts include six dining tables, a window lounge, southeast bathrooms and southwest storage; the study hall has nine classroom desks, four reading laptops for MP4 lessons and a saved notes, schedules and awards wall. [Study hall instructions](docs/study-hall.md) cover saved lectures, hand raising, subject reading with highlights and notes, and homework in backpacks or break-floor lockers. Curriculum content and an AI tutor are planned separately. Multiple tabs in one browser share one active avatar.
+
+The creative studio's typewriter now has light parchment, Courier New ink texture and adjustable mechanical sounds. Dictionary and *The Artist’s Way* open in app; add your own copy of the latter. See [studio instructions](docs/studios.md).
 
 Sit **Claude Code**, **Codex**, **OpenCode**, **Grok**, **Muse**, **DeepSeek Harness** and **Cursor** workers at desks, watch each one's terminal on the laptop in front of it,
 and jump into any of them together. Every GitHub repo is a floor of the building.
@@ -32,6 +38,8 @@ curl -fsSL https://raw.githubusercontent.com/AgentSystemLabs/agent-office/main/i
 
 ## What it is
 
+**Your shared break floor:** food service, two kitchen volunteer roles, a reading library for uploaded books, a persistent drawing desk, document and mood-board organizer, bathrooms, lockers, supplies and roaming staff. Open **Break floor** or choose it in the elevator. Pip now answers guide questions and teaches GitHub. See [the break-floor guide](docs/break-floor.md).
+
 - **A floor per project.** Ride the elevator, pick one of your GitHub repos, and the office clones it (showing how far along it is) and opens a floor for it. Every worker, board and queue on that floor works in that checkout.
 - **Workers at desks.** Walk up to an empty desk, press **E**, and pick Claude Code, Codex, OpenCode, Grok, Muse, DeepSeek Harness, Pi or Cursor, each with its model and reasoning effort. The agent's live terminal shows on its laptop, and anyone can open it and type.
 - **Talk instead of typing.** Hold **Ctrl+Space** (or the **🎤**) in a worker's terminal or a prompt box and say what you want: it's typed in for you to send. Your browser does the listening, so there's nothing to install.
@@ -46,6 +54,10 @@ curl -fsSL https://raw.githubusercontent.com/AgentSystemLabs/agent-office/main/i
 There's a lot more (a rooftop bar, an office dog, an arcade, supercars in the garage to drive round a scenic loop past a farm, pines, mountains and a beach): see [docs/features.md](docs/features.md).
 
 ## Requirements
+
+**New to coding?** Pip, the blue office guide, walks around the floor and explains the tools in everyday language. Press **F2**, click **Ask Pip**, or press **E** near him for a walking tour, examples of what to ask a worker, and a searchable tool guide. Pip uses built-in explanations without coding-agent usage. See [the beginner guide](docs/guide.md).
+
+The boss’s upstairs computer can loop your own copy of the original American *Office* intro silently while its theme plays from that desk every 15 minutes, at 80% in the boss office and 45% in the main work area. Use **E** at the **World’s Best Boss** plaque to select the video and control the theme. Minesweeper still works from the boss’s chair. See [boss-room playback](docs/boss-room.md).
 
 On the machine that runs the office:
 
@@ -378,7 +390,7 @@ deploy/coolify.sh ssh 'node /opt/agent-office/bin/agent-office.js accounts invit
 | M | Mute / unmute in voice |
 | Ctrl + Space | Dictate into a terminal or a prompt box: hold it and talk (or hold the **🎤**) |
 | Tab | The ☰ menu: every window |
-| Esc | Close any window |
+| Esc | Close any window. In a terminal, **Hide**, **✕** and Esc only hide the terminal; the worker keeps running |
 | Ctrl + [ | Send Esc to a terminal, to close a menu like Claude's `/skills` or interrupt Claude (or **⎋ Esc** in its header) |
 
 The full list is in [docs/controls.md](docs/controls.md).
@@ -401,6 +413,10 @@ The rules for coding agents working on this repository are in [`AGENTS.md`](AGEN
 Every change to the app that lands on `main` is published as a GitHub release by [`.github/workflows/release.yml`](.github/workflows/release.yml), and `install.sh` installs the newest one. Bump `package.json`'s version to start a new minor.
 
 ## More
+
+Uploads support **512 MB per file** with streaming to disk and a free-space reserve. Open **Station library archives → Storage & performance** to check cabinet size, largest files, free disk, memory and current view performance. See [capacity and world-building strategy](docs/reading-and-archives.md#capacity-and-growing-your-world).
+
+Upload learning files once in **Store room → Documents → Station library archives**, categorize them by section and assign them to multiple station shelves. PDF books open with corner-click page turns, facing pages, highlights and a notes sheet with citations back to the book. See [Reading and station archives](docs/reading-and-archives.md).
 
 - [Features](docs/features.md): everything in the office, room by room
 - [Agents](docs/agents.md): Claude Code, Codex and OpenCode, models and effort, and the office's prompts

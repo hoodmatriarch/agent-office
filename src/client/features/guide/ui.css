@@ -1,0 +1,48 @@
+.guide-panel {
+  position: relative;
+  width: min(950px, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 26px;
+  border-radius: 20px;
+  background: #f8fbff;
+  color: #25334a;
+  box-shadow: 0 22px 80px #14253b55;
+}
+.guide-panel header { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
+.guide-panel h2 { margin: 5px 0 10px; font-size: 27px; }
+.guide-kicker { color: #2869c4; font-size: 12px; font-weight: 900; letter-spacing: .07em; }
+.guide-intro { line-height: 1.6; max-width: 760px; margin-top: 4px; }
+.guide-question { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; padding: 14px; border-radius: 12px; background: #eaf1fb; }
+.guide-question label { flex: 1; font-size: 14px; min-width: 200px; font-weight: 800; }
+.guide-question input { display: block; margin-top: 8px; width: 100%; padding: 10px; border: 1px solid #a9c8f0; border-radius: 8px; font: inherit; }
+.guide-answer { flex-basis: 100%; margin: 0; font-size: 14px; line-height: 1.6; }
+.guide-answer:empty { display: none; }
+.guide-quick { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
+.guide-library { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; margin-top: 22px; }
+.guide-library label { display: block; font-size: 13px; font-weight: 800; }
+.guide-library input { box-sizing: border-box; width: 100%; margin: 8px 0 12px; padding: 12px; border: 1px solid #b4c8e1; border-radius: 10px; background: white; }
+.guide-topics { display: flex; flex-direction: column; gap: 5px; max-height: 390px; overflow: auto; }
+.guide-topic { text-align: left; font: inherit; font-size: 13px; line-height: 1.4; padding: 10px; border: 1px solid transparent; border-radius: 9px; color: #25334a; background: transparent; cursor: pointer; }
+.guide-topic:hover, .guide-topic[aria-pressed=true] { background: #e1edff; border-color: #a9c8f0; }
+.guide-lesson h3 { font-size: 24px; margin: 7px 0 13px; }
+.guide-lesson h4 { font-size: 14px; margin: 18px 0 7px; }
+.guide-lesson p, .guide-lesson li { font-size: 15px; line-height: 1.65; }
+.guide-lesson li + li { margin-top: 8px; }
+.guide-lesson ol { padding-left: 24px; }
+.guide-what { font-weight: 700; }
+.guide-example { padding: 1px 16px 8px; border-radius: 12px; background: #e8f5ef; border-left: 4px solid #44ad88; }
+.guide-term { padding: 11px 14px; background: #e9f0fa; border-radius: 10px; }
+.guide-panel footer { margin-top: 20px; font-size: 12px; color: #586b84; }
+.guide-call { position: fixed; z-index: 18; top: 76px; left: 14px; box-shadow: 0 4px 14px #25334a25; }
+.guide-tour { position: fixed; z-index: 18; right: 18px; bottom: 18px; width: min(340px, calc(100vw - 36px)); padding: 20px; box-sizing: border-box; background: #f8fbfff2; border: 2px solid #8bb9f4; border-radius: 16px; color: #25334a; box-shadow: 0 12px 40px #25334a30; }
+.guide-tour[hidden], .guide-call[hidden] { display: none; }
+.guide-tour h3 { padding-right: 15px; margin: 8px 0; font-size: 18px; }
+.guide-tour p { font-size: 14px; line-height: 1.55; }
+.guide-tour small { color: #586b84; }
+.guide-tour-close { position: absolute; right: 8px; top: 8px; border: 0; background: transparent; cursor: pointer; font-size: 18px; color: #25334a; }
+@media (max-width: 700px) {
+  .guide-panel { padding: 18px; }
+  .guide-library { grid-template-columns: 1fr; gap: 18px; }
+  .guide-topics { max-height: 160px; }
+}
