@@ -11,6 +11,8 @@
 
 **A 3D office your team shares with its coding agents.**
 
+The optional [ambient Dunder Mifflin cast](docs/ambient-office.md) has its own working day, coworker conversations and occasional celebrations. Use the **Dunder Mifflin** clock or **E** at a character for conversation, Pam's local task notes or a work brief; hide dialogue or coworkers for quiet work.
+
 Sit **Claude Code**, **Codex**, **OpenCode**, **Grok**, **Muse**, **DeepSeek Harness** and **Cursor** workers at desks, watch each one's terminal on the laptop in front of it,
 and jump into any of them together. Every GitHub repo is a floor of the building.
 
