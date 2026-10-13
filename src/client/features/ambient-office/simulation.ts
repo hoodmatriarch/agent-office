@@ -16,6 +16,7 @@ export interface AmbientState {
   activity: string;
   target: [number, number];
   line?: string;
+  seat?: { hips: number; facing: number };
 }
 export interface Snapshot {
   day: number;

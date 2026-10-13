@@ -6,6 +6,13 @@ import type { Interactable } from '../../world/types';
 import { CAST } from './cast';
 import type { Snapshot } from './simulation';
 
+/** A feature can supply a dedicated work space without changing the character bible or schedule. */
+export interface AmbientSpace {
+  nav: { nearestWalkable(p: Pt): Pt; route(from: Pt, to: Pt): Pt[] };
+  homes: Readonly<Record<string, Pt>>;
+  adapt(snapshot: Snapshot): Snapshot;
+}
+
 interface Actor {
   person: Person;
   it: Interactable;
@@ -21,7 +28,7 @@ export class AmbientWorld {
   readonly root = new THREE.Group();
   readonly actors = new Map<string, Actor>();
 
-  constructor() {
+  constructor(private space?: AmbientSpace) {
     this.root.name = 'ambient-office';
     for (const p of CAST) {
       const person = new Person(p.name, p.color, p.look);
@@ -29,7 +36,8 @@ export class AmbientWorld {
       const label = person.root.children.find((child): child is THREE.Sprite => child instanceof THREE.Sprite);
       label?.scale.multiplyScalar(0.75);
       person.root.name = `ambient-${p.id}`;
-      const at = nearestWalkable(p.home);
+      const home = space?.homes[p.id] ?? p.home;
+      const at = space ? space.nav.nearestWalkable(home) : nearestWalkable(home);
       person.root.position.set(at[0], 0, at[1]);
       const it: Interactable = { kind: 'ambientnpc', decorId: p.id, x: at[0], z: at[1], radius: 2.2, off: true };
       person.root.userData.interact = it;
@@ -65,8 +73,8 @@ export class AmbientWorld {
       const destination = state.target.join(',');
       if (!occupied && destination !== actor.destination) {
         actor.destination = destination;
-        const goal = nearestWalkable(state.target);
-        actor.path = route([pos.x, pos.z], goal);
+        const goal = this.space ? this.space.nav.nearestWalkable(state.target) : nearestWalkable(state.target);
+        actor.path = this.space ? this.space.nav.route([pos.x, pos.z], goal) : route([pos.x, pos.z], goal);
       }
       let budget = Math.min(dt, 0.1) * 1.9;
       const moving = !occupied && actor.path.length > 0;
@@ -86,6 +94,9 @@ export class AmbientWorld {
       }
       actor.it.x = pos.x;
       actor.it.z = pos.z;
+      const seated = !moving && !occupied ? state.seat : undefined;
+      actor.person.sit(seated?.hips ?? null);
+      if (seated) actor.person.root.rotation.y = seated.facing;
       const distance = Math.hypot(pos.x - viewer.x, pos.z - viewer.z);
       if (actor.label) actor.label.visible = distance < 10;
       actor.person.setDoing(distance < 6 ? (occupied ? 'Helping you' : state.activity) : undefined);

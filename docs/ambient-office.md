@@ -12,6 +12,8 @@ The bible's historical and later-era supporting cast (Jan, Karen, Roy, Jo, Gabe,
 
 ## Use it
 
+The cast works in its own [Scranton replica extension](scranton-extension.md). Walk through **Dunder Mifflin →** on the original office's east wall, between the Services board and TV, and follow the hallway north, then left into the annex. Reception, the bullpen, accounting, Michael's office, the conference room, kitchen and break room are all connected. These are dedicated character workstations, separate from the coding-agent desks.
+
 Click the **Dunder Mifflin** clock near the top left to open the coworker directory, or look at a coworker and press **E**. Say hello, ask about their day, or use their optional work scratchpad. **✕** and **Esc** close the window through the office's standard focus handling and restore mouse-look.
 
 **Show coworkers** hides or reveals the cast. **Quiet work** hides conversation bubbles while keeping staff visible. Both choices are saved in this browser. Ambient dialogue does not enter the shared chat or generate sound. Characters appear only on the regular office floor, not on the roof, in the garage, during elevator travel or on custom maps. The directory remains available during their off shift, without summoning absent staff.
@@ -30,6 +32,6 @@ The schedule is a pure function of wall-clock time and floor ID. Browsers with s
 
 ## Implementation and checks
 
-The module is `src/client/features/ambient-office/`: `cast.ts` describes characters; `scenes.ts` contains original group dialogue; `simulation.ts` schedules independent routines and outcomes; `world.ts` animates the existing rigs and navigation; `ui.ts` and `notes.ts` implement optional conversation and local assistance. The only composition change is an install entry in `main.ts`. It registers world ticks, moving usables and the `ambientnpc` interaction. No protocol, server or core-store changes are needed.
+The module is `src/client/features/ambient-office/`: `cast.ts` describes characters; `scenes.ts` contains original group dialogue; `simulation.ts` schedules independent routines and outcomes; `world.ts` animates the existing rigs and navigation; `ui.ts` and `notes.ts` implement optional conversation and local assistance. A space dependency from `features/scranton/` relocates routines into the replica and seats staff at their assigned workstations. The feature registers world ticks, moving usables and the `ambientnpc` interaction. No protocol, server or core-store changes are needed.
 
 `tests/ambient-office.test.ts` verifies deterministic schedules, offscreen continuity, autonomous group events, departures, rare rituals, cast identities and walkable paths, and meaningful checklist and handoff behavior. Validate changes with `npm run typecheck`, `npm test`, `npm run build` and a headless browser screenshot of the cast and directory.

@@ -5,7 +5,7 @@ import { CAST_BY_ID } from './cast';
 import { readPreferences } from './notes';
 import { sampleOffice } from './simulation';
 import { ambientPanel } from './ui';
-import { AmbientWorld } from './world';
+import { AmbientWorld, type AmbientSpace } from './world';
 
 declare module '../../world/types' {
   interface InteractKinds {
@@ -13,12 +13,16 @@ declare module '../../world/types' {
   }
 }
 
-export function installAmbientOffice(ctx: Ctx) {
+export function installAmbientOffice(ctx: Ctx, space?: AmbientSpace) {
   const preferences = readPreferences();
-  const world = new AmbientWorld();
+  const world = new AmbientWorld(space);
   ctx.scene.add(world.root);
   let busy: string | null = null;
-  let snapshot = sampleOffice(Date.now(), store.floor ?? 'office');
+  const sample = () => {
+    const next = sampleOffice(Date.now(), store.floor ?? 'office');
+    return space?.adapt(next) ?? next;
+  };
+  let snapshot = sample();
   let sampledAt = 0;
   const panel = ambientPanel({ snapshot: () => snapshot, floor: () => store.floor ?? 'office', preferences, busy: (id) => { busy = id; } });
 
@@ -40,7 +44,7 @@ export function installAmbientOffice(ctx: Ctx) {
     const now = Date.now();
     if (now - sampledAt >= 300 || sampledAt === 0) {
       sampledAt = now;
-      snapshot = sampleOffice(now, store.floor ?? 'office');
+      snapshot = sample();
       panel.paint();
     }
     const available = !!store.floor && ctx.inOffice() && !ctx.upTop() && !ctx.trip() && ctx.player.pos.y > -1;
