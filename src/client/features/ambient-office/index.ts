@@ -49,6 +49,6 @@ export function installAmbientOffice(ctx: Ctx, space?: AmbientSpace) {
     }
     const available = !!store.floor && ctx.inOffice() && !ctx.upTop() && !ctx.trip() && ctx.player.pos.y > -1;
     panel.badge.hidden = !available;
-    world.update(snapshot, dt, t, available && preferences.enabled, preferences.quiet, busy, ctx.player.pos);
+    world.update(snapshot, dt, t, available && preferences.enabled, preferences.quiet, busy, ctx.player.pos, ctx.me.emoteId);
   });
 }

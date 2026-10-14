@@ -1,5 +1,6 @@
 import { CAST, type Coworker } from './cast';
 import { SCENES, type Scene } from './scenes';
+import { perform, type Performance, type GestureCue } from './choreography';
 
 export const DAY_MS = 40 * 60 * 1000;
 export const SLOT_MS = 120 * 1000;
@@ -17,13 +18,17 @@ export interface AmbientState {
   target: [number, number];
   line?: string;
   seat?: { hips: number; facing: number };
+  attention?: string;
+  gesture?: GestureCue;
 }
 export interface Snapshot {
+  sampledAt: number;
   day: number;
   minute: number;
   clock: string;
   phase: 'arrival' | 'work' | 'lunch' | 'departure' | 'after-hours';
   scene?: Scene;
+  performance?: Performance;
   people: AmbientState[];
   memories: string[];
 }
@@ -54,6 +59,7 @@ export function sampleOffice(timestamp: number, floor: string): Snapshot {
   const selected = sceneFor(day, slot, floor);
   const event = (phase === 'work' || phase === 'lunch') && elapsed < 82000 ? selected : undefined;
   const participants = event ? [...new Set(event.beats.map((b) => b.who))] : [];
+  const performance = event ? perform(event, elapsed, day * 20 + slot) : undefined;
   const beat = event && elapsed >= 35000 && elapsed < 35000 + event.beats.length * 6000 ? event.beats[Math.floor((elapsed - 35000) / 6000)] : undefined;
   const people = CAST.map((p, i): AmbientState => {
     const member = participants.indexOf(p.id);
@@ -76,7 +82,9 @@ export function sampleOffice(timestamp: number, floor: string): Snapshot {
       target = [7.8 + (i % 3 - 1) * 0.65, -9.4 + (i % 4) * 0.6];
     }
     if (!present) activity = p.visitor ? (p.id === 'darryl' ? 'Working downstairs' : 'Away from the branch') : 'Off shift';
-    return { person: p, present, activity, target, line: beat?.who === p.id ? beat.text : undefined };
+    const attention = member < 0 ? undefined : performance?.speaker === p.id ? performance.listener : performance?.speaker;
+    return { person: p, present, activity, target, line: performance?.stage === 'dialogue' && beat?.who === p.id ? beat.text : undefined,
+      attention, gesture: performance?.cues[p.id] };
   });
   const memories: string[] = [];
   // Completed work slots, including yesterday: continuity does not depend on watching a scene.
@@ -89,5 +97,5 @@ export function sampleOffice(timestamp: number, floor: string): Snapshot {
     memories.push(sceneFor(d, s, floor).aftermath);
   }
   const clock = `${Math.floor(minute / 60)}:${String(Math.floor(minute % 60)).padStart(2, '0')}`;
-  return { day, minute, clock, phase, scene: event, people, memories };
+  return { sampledAt: timestamp, day, minute, clock, phase, scene: event, performance, people, memories };
 }
